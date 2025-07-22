@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-gray-100 p-0 m-0 min-h-screen">
+	<div class="bg-gray-100 p-0 m-0">
 		<!-- Application Title Box outside the card -->
 		<div class="flex items-center max-w-8xl mx-auto">
 			<h2 class="text-2xl font-bold bg-purple-400 text-white px-6 py-2 rounded-t">Application</h2>
