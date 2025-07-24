@@ -27,6 +27,8 @@ export function useLogin() {
 
 	const email = ref('')
 	const password = ref('')
+	const keycode = ref('')
+	const loginPending = ref(false)
 	const loading = ref(false)
 	const error = ref('')
 
@@ -49,28 +51,60 @@ export function useLogin() {
 			})
 			*/
 
-			// Mock successful login
-			const mockUser = {
-			id: 1,
-			email: email.value,
-			name: email.value.split('@')[0] // Use part before @ as name
-			}
+			await new Promise(resolve => setTimeout(resolve, 1000));
 
-			// Set mock user in store
-			authStore.user = mockUser
-			authStore.token = 'mock-token'
-			localStorage.setItem('token', 'mock-token')
-			localStorage.setItem('mock-email', email.value) // Store email for checkAuth
-			
-			// Redirect to the original destination or new applicants page
-			const redirectPath = route.query.redirect as string || '/applicant-directory/new-applicants'
-			await router.push(redirectPath)
+			loginPending.value = true;
+
 		} catch (err) {
 			error.value = err instanceof Error ? err.message : 'An error occurred during login'
 		} finally {
 			loading.value = false
 		}
 	}
+
+	const handleKeycode = async () => {
+		// Validate keycode input
+		try {
+			loading.value = true
+			error.value = ''
+			
+			if (!keycode.value) {
+				throw new Error('Please enter keycode')
+			}
+
+			const mockKeycode = '12345678'
+
+			if (keycode.value == mockKeycode) {
+
+				// Mock successful login
+				const mockUser = {
+					id: 1,
+					email: email.value,
+					name: email.value.split('@')[0]
+				}
+
+				// Set mock user in store
+				authStore.user = mockUser
+				authStore.token = 'mock-token'
+				localStorage.setItem('token', 'mock-token')
+				localStorage.setItem('mock-email', email.value)
+				localStorage.setItem('user_type', 'admin')
+
+				await new Promise(resolve => setTimeout(resolve, 2500));
+
+				const redirectPath = route.query.redirect as string || '/applicant-directory/new-applicants'
+				await router.push(redirectPath)
+			} else {
+				throw new Error('Invalid keycode')
+			}
+
+		} catch (err) {
+			error.value = err instanceof Error ? err.message : 'An error occurred during login'
+		} finally {
+			loading.value = false
+		}
+	}
+
 
 	async function handleLogout() {
 		uiStore.setLoading(true)
@@ -89,9 +123,12 @@ export function useLogin() {
 	return {
 		email,
 		password,
+		keycode,
+		loginPending,
 		loading,
 		error,
 		handleLogin,
-		handleLogout
+		handleLogout,
+		handleKeycode
 	}
 } 

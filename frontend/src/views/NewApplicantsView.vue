@@ -89,17 +89,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(applicant, i) in filteredApplicants" :key="i" :class="[
+                            <tr v-for="(applicant, i) in paginatedApplicants" :key="i" :class="[
                                 'transition',
                                 applicant.reapplicant ? 'bg-[#fbe9e7]' : 'hover:bg-gray-50',
                                 'border-b border-gray-100 last:border-b-0'
                             ]">
                                 <td class="px-2 py-2 text-center">
-                                    <input type="checkbox" v-model="selected" :value="i" class="accent-indigo-500 rounded" />
+                                    <input type="checkbox" v-model="selected" :value="i + (currentPage-1)*pageSize" class="accent-indigo-500 rounded" />
                                 </td>
                                 <td class="px-4 py-2 text-xs text-center">{{ applicant.position }}</td>
                                 <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center">
-                                    <router-link :to="{ name: 'applicant-directory-new-details', params: { id: i } }" class="text-indigo-700 underline">
+                                    <router-link :to="{ name: 'applicant-directory-new-details', params: { id: i + (currentPage-1)*pageSize } }" class="text-indigo-700 underline">
                                         {{ applicant.name }}
                                     </router-link>
                                 </td>
@@ -108,7 +108,7 @@
                                 <td class="px-4 py-2 text-xs text-center">{{ applicant.contact }}</td>
                                 <td class="px-4 py-2 text-xs text-center">₱{{ applicant.salary }}</td>
                             </tr>
-                            <tr v-if="filteredApplicants.length === 0">
+                            <tr v-if="paginatedApplicants.length === 0">
                                 <td colspan="7" class="text-center text-gray-400 py-6">No applicants found.</td>
                             </tr>
                         </tbody>
@@ -125,15 +125,27 @@
                         </div>
                     </div>
                     <nav class="inline-flex -space-x-px">
-                        <button class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-l hover:bg-[#fbe9e7] bg-white transition-colors">&lt;</button>
-                        <button class="px-2 py-1 text-xs text-indigo-600 border-t border-b border-gray-300 bg-white">1</button>
-                        <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">2</button>
-                        <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">3</button>
-                        <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">4</button>
-                        <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">5</button>
-                        <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">6</button>
-                        <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">7</button>
-                        <button class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-r hover:bg-[#fbe9e7] bg-white transition-colors">&gt;</button>
+                        <button
+                            class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-l hover:bg-[#fbe9e7] bg-white transition-colors"
+                            :disabled="currentPage === 1"
+                            @click="goToPage(currentPage - 1)"
+                        >&lt;</button>
+                        <button
+                            v-for="page in pageCount"
+                            :key="page"
+                            class="px-2 py-1 text-xs"
+                            :class="[
+                                page === currentPage
+                                    ? 'text-indigo-600 border-t border-b border-gray-300 bg-white'
+                                    : 'text-gray-500 border-t border-b border-gray-300 bg-white'
+                            ]"
+                            @click="goToPage(page)"
+                        >{{ page }}</button>
+                        <button
+                            class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-r hover:bg-[#fbe9e7] bg-white transition-colors"
+                            :disabled="currentPage === pageCount"
+                            @click="goToPage(currentPage + 1)"
+                        >&gt;</button>
                     </nav>
                 </div>
             </div>
@@ -145,22 +157,35 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
-import type { Ref } from 'vue'
-import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 const router = useRouter()
 const route = useRoute()
+
+const pageSize = 7
+const currentPage = ref(1)
+
 const applicants = [
-    { position: 'HR Recruitment', name: 'John Michael Smith', date: 'July 31, 2024', email: 'jmsmith@gmail.com', contact: '09285483729', salary: 18000, reapplicant: false },
-    { position: 'PHP Developer', name: 'Mary Elizabeth Johnson', date: 'June 25, 2023', email: 'mjohson@gmail.com', contact: '09878886534', salary: 21000, reapplicant: false },
-    { position: 'SMM Specialist', name: 'Patricia Anne Thompson', date: 'May 11, 2024', email: 'pthompson@gmail.com', contact: '09876937854', salary: 17000, reapplicant: false },
-    { position: 'HR Compensation and Benefits', name: 'William Alexander Johnson', date: 'April 30, 2024', email: 'wjohnson@gmail.com', contact: '09284378567', salary: 14000, reapplicant: false },
-    { position: 'SEO Analyst', name: 'Jenifer Lynn Rodriguez', date: 'March 11, 2024', email: 'jrodriguez@gmail.com', contact: '09898048271', salary: 13000, reapplicant: true },
-    { position: 'FDG', name: 'James Edward Davis', date: 'February 23, 2024', email: 'jdavis@gmail.com', contact: '09893057868', salary: 23000, reapplicant: true },
-    { position: 'Web Designer', name: 'Linda Marie Clark', date: 'February 19, 2024', email: 'lclark@gmail.com', contact: '09849372492', salary: 12000, reapplicant: false },
-    { position: 'HR Recruitment', name: 'Elizabeth Ann Scott', date: 'January 7, 2024', email: 'escott@gmail.com', contact: '09835057483', salary: 12000, reapplicant: false },
-    { position: 'Web Developer', name: 'Michael Joseph Garcia', date: 'January 5, 2024', email: 'mjgarcia@gmail.com', contact: '09123217589', salary: 18000, reapplicant: false },
-    { position: 'Web Developer', name: 'Barbara Jean Hernandez', date: 'January 5, 2024', email: 'bhernandez@gmail.com', contact: '09898923153', salary: 40000, reapplicant: false },
+    { position: 'HR Recruitment', name: 'John Michael Smith', date: '2024-07-31', email: 'jmsmith@gmail.com', contact: '09285483729', salary: 18000, reapplicant: false },
+    { position: 'PHP Developer', name: 'Mary Elizabeth Johnson', date: '2023-06-25', email: 'mjohson@gmail.com', contact: '09878886534', salary: 21000, reapplicant: false },
+    { position: 'SMM Specialist', name: 'Patricia Anne Thompson', date: '2024-05-11', email: 'pthompson@gmail.com', contact: '09876937854', salary: 17000, reapplicant: false },
+    { position: 'HR Compensation and Benefits', name: 'William Alexander Johnson', date: '2024-04-30', email: 'wjohnson@gmail.com', contact: '09284378567', salary: 14000, reapplicant: false },
+    { position: 'SEO Analyst', name: 'Jenifer Lynn Rodriguez', date: '2024-03-11', email: 'jrodriguez@gmail.com', contact: '09898048271', salary: 13000, reapplicant: true },
+    { position: 'FDG', name: 'James Edward Davis', date: '2024-02-23', email: 'jdavis@gmail.com', contact: '09893057868', salary: 23000, reapplicant: true },
+    { position: 'Web Designer', name: 'Linda Marie Clark', date: '2024-02-19', email: 'lclark@gmail.com', contact: '09849372492', salary: 12000, reapplicant: false },
+    { position: 'HR Recruitment', name: 'Elizabeth Ann Scott', date: '2024-01-07', email: 'escott@gmail.com', contact: '09835057483', salary: 12000, reapplicant: false },
+    { position: 'Web Developer', name: 'Michael Joseph Garcia', date: '2024-01-05', email: 'mjgarcia@gmail.com', contact: '09123217589', salary: 18000, reapplicant: false },
+    { position: 'Web Developer', name: 'Barbara Jean Hernandez', date: '2024-01-05', email: 'bhernandez@gmail.com', contact: '09898923153', salary: 40000, reapplicant: false },
+    // --- Add more for pagination ---
+    { position: 'QA Tester', name: 'Chris Evans', date: '2024-06-15', email: 'cevans@gmail.com', contact: '09123456789', salary: 15000, reapplicant: false },
+    { position: 'UI Designer', name: 'Natasha Romanoff', date: '2024-05-20', email: 'nromanoff@gmail.com', contact: '09234567890', salary: 17000, reapplicant: false },
+    { position: 'Backend Developer', name: 'Steve Rogers', date: '2024-04-10', email: 'srogers@gmail.com', contact: '09345678901', salary: 22000, reapplicant: false },
+    { position: 'Frontend Developer', name: 'Tony Stark', date: '2024-03-05', email: 'tstark@gmail.com', contact: '09456789012', salary: 25000, reapplicant: true },
+    { position: 'DevOps Engineer', name: 'Bruce Banner', date: '2024-02-28', email: 'bbanner@gmail.com', contact: '09567890123', salary: 24000, reapplicant: false },
+    { position: 'Project Manager', name: 'Clint Barton', date: '2024-01-18', email: 'cbarton@gmail.com', contact: '09678901234', salary: 26000, reapplicant: false },
+    { position: 'Support', name: 'Wanda Maximoff', date: '2024-01-10', email: 'wmaximoff@gmail.com', contact: '09789012345', salary: 16000, reapplicant: true },
+    { position: 'HR Recruitment', name: 'Peter Parker', date: '2024-01-02', email: 'pparker@gmail.com', contact: '09890123456', salary: 12000, reapplicant: false },
+    { position: 'Web Developer', name: 'Stephen Strange', date: '2023-12-25', email: 'sstrange@gmail.com', contact: '09901234567', salary: 20000, reapplicant: false },
+    { position: 'Web Developer', name: 'Scott Lang', date: '2023-12-20', email: 'slang@gmail.com', contact: '09111222333', salary: 19000, reapplicant: false },
 ]
 const uniquePositions = computed(() => {
     return [...new Set(applicants.map(a => a.position))]
@@ -214,26 +239,27 @@ watch(activeFilter, () => {
     dateTo.value = ''
 })
 const filteredApplicants = computed(() => {
+    let arr = applicants
     if (activeFilter.value === 'name') {
-        return applicants.filter(a =>
+        arr = applicants.filter(a =>
             !searchValue.value || a.name.toLowerCase().includes(searchValue.value.toLowerCase())
         )
     } else if (activeFilter.value === 'position') {
-        return applicants.filter(a =>
+        arr = applicants.filter(a =>
             !searchValue.value || a.position === searchValue.value
         )
     } else if (activeFilter.value === 'salary') {
         if (!searchValue.value) return applicants
         const [min, max] = searchValue.value.split('-').map(Number)
-        return applicants.filter(a => a.salary >= min && a.salary <= max)
+        arr = applicants.filter(a => a.salary >= min && a.salary <= max)
     } else if (activeFilter.value === 'date') {
-        return applicants.filter(a => {
+        arr = applicants.filter(a => {
             if (dateFrom.value && a.date < dateFrom.value) return false
             if (dateTo.value && a.date > dateTo.value) return false
             return true
         })
     }
-    return applicants
+    return arr
 })
 const tabs = [
     { key: 'new', label: 'New', count: 33, color: 'bg-gray-500' },
@@ -244,18 +270,28 @@ const tabs = [
     { key: 'job-offer', label: 'Job Offer', count: 1, color: 'bg-green-400' },
     { key: 'hired', label: 'Hired', count: 1, color: 'bg-green-700' },
 ]
+
+const pageCount = computed(() => Math.ceil(filteredApplicants.value.length / pageSize))
+
+const paginatedApplicants = computed(() => {
+    const start = (currentPage.value - 1) * pageSize
+    return filteredApplicants.value.slice(start, start + pageSize)
+})
+
+function goToPage(page: number) {
+    if (page < 1 || page > pageCount.value) return
+    currentPage.value = page
+}
+
+watch(filteredApplicants, () => {
+    // Reset to first page if filter changes and current page is out of range
+    if (currentPage.value > pageCount.value) currentPage.value = 1
+})
+
 function goToTab(tabKey: string) {
     router.push({ name: `applicant-directory-${tabKey}` })
 }
 function isActiveTab(tabKey: string) {
     return route.name === `applicant-directory-${tabKey}`
-}
-function goBack() {
-    router.push({ name: 'applicant-directory-new' })
-}
-// Example: Add a mock function to simulate shortlisting and show the snackbar
-function shortlistApplicant(index: number) {
-  // ... your shortlisting logic here ...
-  toast.success('Applicant successfully shortlisted!')
 }
 </script>
