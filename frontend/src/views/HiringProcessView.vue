@@ -1,6 +1,6 @@
 <template>
-<div class="bg-gray-100 p-0 m-0">
-	<div class="max-w-7xl mx-auto bg-white rounded shadow p-8 mt-8">
+<div class="bg-gray-100 p-0 m-0 dark:bg-[#111827]">
+	<div class="max-w-7xl mx-auto bg-white rounded shadow p-8 mt-8 dark:bg-gray-800">
 		<!-- <div class="flex flex-wrap items-center w-full mb-1 gap-x-4 gap-y-2">
 			<button @click="goBack" class="flex items-center text-purple-500 hover:text-purple-700 font-semibold">
 				<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
@@ -11,12 +11,12 @@
 			<h2 class="text-2xl font-bold">Hiring Process</h2>
 			<div class="mt-2 text-lg font-semibold">
 				<span class="text-purple-700">{{ applicant.name }}</span>
-				<span class="text-gray-500"> | {{ applicant.position }} Applicant</span>
+				<span class="text-gray-500 dark:text-gray-300"> | {{ applicant.position }} Applicant</span>
 			</div>
 		</div>
 		<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 			<!-- Phone Screening -->
-			<div class="rounded border shadow bg-white flex flex-col relative">
+			<div class="rounded border shadow bg-white flex flex-col relative dark:bg-gray-800">
 				<div class="bg-purple-600 text-white font-bold rounded-t py-2 relative flex items-center justify-center">
 					<span>Phone Screening</span>
 					<span
@@ -28,7 +28,7 @@
 						</svg>
 					</span>
 				</div>
-				<div class="p-4 flex flex-col gap-3">
+				<div class="p-4 flex flex-col gap-3 ">
 					<label class="text-xs font-semibold">Schedule <input type="date" class="input input-bordered w-full mt-1" v-model="phases.phone.schedule" /></label>
 					<label class="text-xs font-semibold flex items-center gap-2">Notes
 						<div class="relative flex-1 flex items-center">
@@ -88,7 +88,7 @@
 			</div>
 
 			<!-- Initial Interview -->
-			<div class="rounded border shadow bg-white flex flex-col relative">
+			<div class="rounded border shadow bg-white flex flex-col relative dark:bg-gray-800">
 				<div class="bg-purple-600 text-white font-bold rounded-t py-2 relative flex items-center justify-center">
 					<span>Initial Interview</span>
 					<span
@@ -164,11 +164,11 @@
 					class="absolute inset-0 bg-green-500 bg-opacity-20 rounded-xl z-10 pointer-events-none select-none"
 				></div>
 				<!-- Existing overlay for disabled -->
-				<div v-if="!canEditInitialInterview && phases.phone.status !== 'For Initial Interview'" class="absolute inset-0 bg-black bg-opacity-30 rounded z-10 flex items-center justify-center pointer-events-auto select-none"></div>
+				<div v-if="!canEditInitialInterview && phases.phone.status !== 'For Initial Interview'" class="absolute inset-0 dark:bg-gray-800 bg-black bg-opacity-30 dark:bg-opacity-60 rounded z-10 flex items-center justify-center pointer-events-auto select-none"></div>
 			</div>
 
 			<!-- Hands-on Exam -->
-			<div class="rounded border shadow bg-white flex flex-col relative">
+			<div class="rounded border shadow bg-white flex flex-col relative dark:bg-gray-800">
 				<div class="bg-purple-600 text-white font-bold rounded-t py-2 relative flex items-center justify-center">
 					<span>Hands-on Exam</span>
 					<!-- Show check icon if status is Final Interview, else show skip button -->
@@ -213,11 +213,11 @@
 					v-if="phases.exam.status === 'Final Interview'"
 					class="absolute inset-0 bg-green-500 bg-opacity-20 rounded-xl z-10 pointer-events-none select-none"
 				></div>
-				<div v-if="!canEditHandsOnExam" class="absolute inset-0 bg-black bg-opacity-30 rounded z-10 flex items-center justify-center pointer-events-auto select-none"></div>
+				<div v-if="!canEditHandsOnExam" class="absolute inset-0 dark:bg-gray-800 bg-black bg-opacity-30 dark:bg-opacity-60 rounded z-10 flex items-center justify-center pointer-events-auto select-none"></div>
 			</div>
 
 			<!-- Final Interview -->
-			<div class="rounded border shadow bg-white flex flex-col relative">
+			<div class="rounded border shadow bg-white flex flex-col relative dark:bg-gray-800">
 				<div class="bg-purple-600 text-white font-bold rounded-t py-2 relative flex items-center justify-center">
 					<span>Final Interview</span>
 					<span
@@ -248,7 +248,7 @@
 					v-if="phases.final.status === 'For Job Offer'"
 					class="absolute inset-0 bg-green-500 bg-opacity-20 rounded z-10 pointer-events-none select-none"
 				></div>
-				<div v-if="!canEditFinalInterview" class="absolute inset-0 bg-black bg-opacity-30 rounded z-10 flex items-center justify-center pointer-events-auto select-none"></div>
+				<div v-if="!canEditFinalInterview" class="absolute inset-0 dark:bg-gray-800 bg-black bg-opacity-30 dark:bg-opacity-60 rounded z-10 flex items-center justify-center pointer-events-auto select-none"></div>
 			</div>
 		</div>
 	</div>
@@ -266,11 +266,11 @@
 <!-- Status Confirmation Modal -->
 <transition name="modal-fade">
 	<div v-if="showStatusConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-		<div class="bg-white rounded shadow-xl p-6 w-full max-w-xs flex flex-col items-center">
-			<h3 class="text-lg font-bold mb-2">Confirm Status Change</h3>
-			<p class="mb-4 text-center">Are you sure you want to set status to <span class="font-semibold text-purple-600">{{ pendingStatus }}</span>?</p>
+		<div class="bg-white rounded shadow-xl p-6 w-full max-w-xs flex flex-col items-center dark:bg-gray-800">
+			<h3 class="text-lg font-bold mb-2 dark:text-white">Confirm Status Change</h3>
+			<p class="mb-4 text-center dark:text-white">Are you sure you want to set status to <span class="font-semibold text-purple-600">{{ pendingStatus }}</span>?</p>
 			<div class="flex gap-4">
-				<button class="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300" @click="cancelStatusChange">Cancel</button>
+				<button class="px-4 py-1 rounded bg-gray-200 dark:bg-gray-400 hover:bg-gray-300 dark:hover:bg-gray-500 dark:text-white" @click="cancelStatusChange">Cancel</button>
 				<button class="px-4 py-1 rounded bg-purple-500 text-white hover:bg-purple-600" @click="confirmStatusChange">Confirm</button>
 			</div>
 		</div>
@@ -280,11 +280,11 @@
 <!-- Add confirmation modals for Initial Interview and Hands-on Exam -->
 <transition name="modal-fade">
 	<div v-if="showInitialStatusConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-		<div class="bg-white rounded shadow-xl p-6 w-full max-w-xs flex flex-col items-center">
-			<h3 class="text-lg font-bold mb-2">Confirm Status Change</h3>
-			<p class="mb-4 text-center">Are you sure you want to set Initial Interview status to <span class="font-semibold text-purple-600">{{ pendingInitialStatus }}</span>?</p>
+		<div class="bg-white rounded shadow-xl p-6 w-full max-w-xs flex flex-col items-center dark:bg-gray-800">
+			<h3 class="text-lg font-bold mb-2 dark:text-white">Confirm Status Change</h3>
+			<p class="mb-4 text-center dark:text-white">Are you sure you want to set Initial Interview status to <span class="font-semibold text-purple-600">{{ pendingInitialStatus }}</span>?</p>
 			<div class="flex gap-4">
-				<button class="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300" @click="cancelInitialStatusChange">Cancel</button>
+				<button class="px-4 py-1 rounded bg-gray-200 dark:bg-gray-400 hover:bg-gray-300 dark:hover:bg-gray-500" @click="cancelInitialStatusChange">Cancel</button>
 				<button class="px-4 py-1 rounded bg-purple-500 text-white hover:bg-purple-600" @click="confirmInitialStatusChange">Confirm</button>
 			</div>
 		</div>
@@ -293,11 +293,11 @@
 
 <transition name="modal-fade">
 	<div v-if="showExamStatusConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-		<div class="bg-white rounded shadow-xl p-6 w-full max-w-xs flex flex-col items-center">
-			<h3 class="text-lg font-bold mb-2">Confirm Status Change</h3>
-			<p class="mb-4 text-center">Are you sure you want to set Hands-on Exam status to <span class="font-semibold text-purple-600">{{ pendingExamStatus }}</span>?</p>
+		<div class="bg-white rounded shadow-xl p-6 w-full max-w-xs flex flex-col items-center dark:bg-gray-800">
+			<h3 class="text-lg font-bold mb-2 dark:text-white">Confirm Status Change</h3>
+			<p class="mb-4 text-center dark:text-white">Are you sure you want to set Hands-on Exam status to <span class="font-semibold text-purple-600">{{ pendingExamStatus }}</span>?</p>
 			<div class="flex gap-4">
-				<button class="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300" @click="cancelExamStatusChange">Cancel</button>
+				<button class="px-4 py-1 rounded bg-gray-200 dark:bg-gray-400 hover:bg-gray-300 dark:hover:bg-gray-500" @click="cancelExamStatusChange">Cancel</button>
 				<button class="px-4 py-1 rounded bg-purple-500 text-white hover:bg-purple-600" @click="confirmExamStatusChange">Confirm</button>
 			</div>
 		</div>
@@ -307,11 +307,11 @@
 <!-- Add confirmation modal for Final Interview in the template -->
 <transition name="modal-fade">
 	<div v-if="showFinalStatusConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-		<div class="bg-white rounded shadow-xl p-6 w-full max-w-xs flex flex-col items-center">
-			<h3 class="text-lg font-bold mb-2">Confirm Status Change</h3>
-			<p class="mb-4 text-center">Are you sure you want to set Final Interview status to <span class="font-semibold text-purple-600">{{ pendingFinalStatus }}</span>?</p>
+		<div class="bg-white rounded shadow-xl p-6 w-full max-w-xs flex flex-col items-center dark:bg-gray-800">
+			<h3 class="text-lg font-bold mb-2 dark:text-white">Confirm Status Change</h3>
+			<p class="mb-4 text-center dark:text-white">Are you sure you want to set Final Interview status to <span class="font-semibold text-purple-600">{{ pendingFinalStatus }}</span>?</p>
 			<div class="flex gap-4">
-				<button class="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300" @click="cancelFinalStatusChange">Cancel</button>
+				<button class="px-4 py-1 rounded bg-gray-200 dark:bg-gray-400 hover:bg-gray-300 dark:hover:bg-gray-500" @click="cancelFinalStatusChange">Cancel</button>
 				<button class="px-4 py-1 rounded bg-purple-500 text-white hover:bg-purple-600" @click="confirmFinalStatusChange">Confirm</button>
 			</div>
 		</div>

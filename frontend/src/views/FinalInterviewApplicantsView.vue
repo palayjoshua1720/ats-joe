@@ -7,7 +7,7 @@
                 v-for="tab in tabs"
                 :key="tab.key"
                 @click="goToTab(tab.key)"
-                class="flex-1 cursor-pointer border border-purple-200 border-t-0 border-b-0 first:rounded-l last:rounded-r transition-all duration-200"
+                class="flex-1 cursor-pointer border border-purple-200 border-t-0 border-b-0 first:rounded-l last:rounded-r transition-all duration-200 dark:bg-gray-600"
                 :class="[
                     isActiveTab(tab.key)
                         ? 'bg-white h-32 -translate-y-8 z-10'
@@ -23,13 +23,13 @@
                         tab.color
                     ]"
                 ></div>
-                <div class="mt-4 text-3xl font-bold leading-none">{{ tab.count }}</div>
-                <div class="text-xs font-semibold text-gray-700 mt-1">{{ tab.label }}</div>
+                <div class="mt-4 text-3xl font-bold leading-none dark:text-white">{{ tab.count }}</div>
+                <div class="text-xs font-semibold text-gray-700 mt-1 dark:text-white">{{ tab.label }}</div>
             </div>
         </div>
 
         <!-- Card Layout -->
-        <div class="bg-white rounded shadow p-6">
+        <div class="bg-white rounded shadow p-6 dark:bg-gray-800">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
                 <div class="text-lg font-semibold mb-2 md:mb-0"></div>
                 <div class="flex items-center gap-2">
@@ -78,7 +78,7 @@
 
             <!-- Modern Data Table -->
             <div class="overflow-x-auto border border-gray-100 bg-white">
-                <table class="min-w-full">
+                <table class="min-w-full dark:bg-gray-800">
                     <thead>
                         <tr class="bg-lime-300 text-white text-xs">
                             <th class="px-2 py-2 w-8 text-center">
@@ -95,16 +95,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(applicant, i) in filteredApplicants" :key="i" :class="[
+                        <tr v-for="(applicant, i) in paginatedApplicants" :key="i" :class="[
                             'transition',
-                            'hover:bg-gray-50',
+                            'hover:bg-gray-50 dark:hover:bg-gray-500',
                             'border-b border-gray-100 last:border-b-0'
                         ]">
                             <td class="px-2 py-2 text-center">
                                 <input type="checkbox" v-model="selected" :value="i" class="accent-indigo-500 rounded" />
                             </td>
                             <td class="px-4 py-2 text-xs text-center">{{ applicant.position }}</td>
-                            <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center">{{ applicant.name }}</td>
+                            <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center dark:text-indigo-400">{{ applicant.name }}</td>
                             <td class="px-4 py-2 text-xs text-center">{{ applicant.dateApplied }}</td>
                             <td class="px-4 py-2 text-xs text-center">{{ applicant.email }}</td>
                             <td class="px-4 py-2 text-xs text-center">{{ applicant.contact }}</td>
@@ -112,7 +112,7 @@
                             <td class="px-4 py-2 text-xs text-center">{{ applicant.finalInterviewDate }}</td>
                             <td class="px-4 py-2 text-xs text-center">{{ applicant.status }}</td>
                         </tr>
-                        <tr v-if="filteredApplicants.length === 0">
+                        <tr v-if="paginatedApplicants.length === 0">
                             <td colspan="9" class="text-center text-gray-400 py-6">No applicants found.</td>
                         </tr>
                     </tbody>
@@ -121,24 +121,36 @@
 
             <!-- Color Legend and Pagination Inline -->
             <div class="flex items-center justify-between mt-4">
-                <div class="bg-gray-100 p-3 rounded flex flex-col w-max">
+                <div class="bg-gray-100 p-3 rounded flex flex-col w-max dark:bg-gray-700">
                     <span class="mb-2"><b>Color Legend</b></span>
                     <div class="flex items-center">
-                        <span class="w-4 h-4 rounded bg-orange-200 mr-2"></span>
+                        <span class="w-4 h-4 rounded bg-orange-200 mr-2 dark:bg-[#4B2C2A]"></span>
                         <span>Reapplicants</span>
                     </div>
                 </div>
-                <nav class="inline-flex -space-x-px">
-                    <button class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-l hover:bg-lime-100 bg-white transition-colors">&lt;</button>
-                    <button class="px-2 py-1 text-xs text-indigo-600 border-t border-b border-gray-300 bg-white">1</button>
-                    <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">2</button>
-                    <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">3</button>
-                    <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">4</button>
-                    <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">5</button>
-                    <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">6</button>
-                    <button class="px-2 py-1 text-xs text-gray-500 border-t border-b border-gray-300 bg-white">7</button>
-                    <button class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-r hover:bg-lime-100 bg-white transition-colors">&gt;</button>
-                </nav>
+                <nav class="inline-flex -space-x-px dark:*:text-white">
+                        <button
+                            class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-l hover:bg-[#fbe9e7] bg-white transition-colors dark:bg-gray-700"
+                            :disabled="currentPage === 1"
+                            @click="goToPage(currentPage - 1)"
+                        >&lt;</button>
+                        <button
+                            v-for="page in pageCount"
+                            :key="page"
+                            class="px-2 py-1 text-xs border border-gray-300"
+                            :class="[
+                                page === currentPage
+                                    ? 'text-indigo-400 dark:bg-gray-600 bg-gray-600'
+                                    : 'text-gray-500'
+                            ]"
+                            @click="goToPage(page)"
+                        >{{ page }}</button>
+                        <button
+                            class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-r hover:bg-[#fbe9e7] bg-white transition-colors dark:bg-gray-700"
+                            :disabled="currentPage === pageCount"
+                            @click="goToPage(currentPage + 1)"
+                        >&gt;</button>
+                    </nav>
             </div>
         </div>
     </div>
@@ -147,6 +159,10 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
 import { ref, computed, watch } from 'vue'
+
+const pageSize = 10
+const currentPage = ref(1)
+
 const router = useRouter()
 const route = useRoute()
 const tabs = [
@@ -167,6 +183,14 @@ function isActiveTab(tabKey: string) {
 const applicants = [
     { position: 'HR Recruitment', name: 'Susan Margaret Adams', dateApplied: 'August 3, 2023', email: 'sadams@gmail.com', contact: '09285483729', salary: 18000, finalInterviewDate: '', status: '' },
     { position: 'PHP Developer', name: 'David Patrick Wilson', dateApplied: 'June 25, 2023', email: 'dwilson@gmail.com', contact: '09878986534', salary: 21000, finalInterviewDate: '', status: '' },
+    { position: 'SMM Specialist', name: 'Richard Andrew Martinez', dateApplied: 'March 26, 2024', email: 'rmartinez@gmail.com', contact: '09878378554', salary: 17000, finalInterviewDate: '', status: '' },
+    { position: 'SMM Specialist', name: 'Richard Andrew Martinez', dateApplied: 'March 26, 2024', email: 'rmartinez@gmail.com', contact: '09878378554', salary: 17000, finalInterviewDate: '', status: '' },
+    { position: 'SMM Specialist', name: 'Richard Andrew Martinez', dateApplied: 'March 26, 2024', email: 'rmartinez@gmail.com', contact: '09878378554', salary: 17000, finalInterviewDate: '', status: '' },
+    { position: 'SMM Specialist', name: 'Richard Andrew Martinez', dateApplied: 'March 26, 2024', email: 'rmartinez@gmail.com', contact: '09878378554', salary: 17000, finalInterviewDate: '', status: '' },
+    { position: 'SMM Specialist', name: 'Richard Andrew Martinez', dateApplied: 'March 26, 2024', email: 'rmartinez@gmail.com', contact: '09878378554', salary: 17000, finalInterviewDate: '', status: '' },
+    { position: 'SMM Specialist', name: 'Richard Andrew Martinez', dateApplied: 'March 26, 2024', email: 'rmartinez@gmail.com', contact: '09878378554', salary: 17000, finalInterviewDate: '', status: '' },
+    { position: 'SMM Specialist', name: 'Richard Andrew Martinez', dateApplied: 'March 26, 2024', email: 'rmartinez@gmail.com', contact: '09878378554', salary: 17000, finalInterviewDate: '', status: '' },
+    { position: 'SMM Specialist', name: 'Richard Andrew Martinez', dateApplied: 'March 26, 2024', email: 'rmartinez@gmail.com', contact: '09878378554', salary: 17000, finalInterviewDate: '', status: '' },
     { position: 'SMM Specialist', name: 'Richard Andrew Martinez', dateApplied: 'March 26, 2024', email: 'rmartinez@gmail.com', contact: '09878378554', salary: 17000, finalInterviewDate: '', status: '' },
 ]
 const uniquePositions = computed(() => {
@@ -229,5 +253,22 @@ watch(activeFilter, () => {
     dateTo.value = ''
     finalInterviewFrom.value = ''
     finalInterviewTo.value = ''
+})
+
+const pageCount = computed(() => Math.ceil(filteredApplicants.value.length / pageSize))
+
+const paginatedApplicants = computed(() => {
+    const start = (currentPage.value - 1) * pageSize
+    return filteredApplicants.value.slice(start, start + pageSize)
+})
+
+function goToPage(page: number) {
+    if (page < 1 || page > pageCount.value) return
+    currentPage.value = page
+}
+
+watch(filteredApplicants, () => {
+    // Reset to first page if filter changes and current page is out of range
+    if (currentPage.value > pageCount.value) currentPage.value = 1
 })
 </script> 

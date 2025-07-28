@@ -10,7 +10,7 @@
                     'w-full md:w-auto px-4 md:px-6 py-2 font-semibold border-t border-l border-b-0 border-r-0 rounded-t',
                     activeTab === tab.key
                         ? 'bg-gradient-to-r from-purple-400 to-pink-400 text-white border-purple-400'
-                        : 'bg-white text-purple-700 border-purple-300 hover:bg-purple-50',
+                        : 'bg-white dark:bg-gray-400 text-purple-700 border-purple-300 hover:bg-purple-50',
                     'transition-colors duration-150',
                 ]"
                 style="border-width: 2px 2px 0 2px; margin-right: -2px;"
@@ -18,9 +18,9 @@
                 {{ tab.label }}
             </button>
         </div>
-        <div class="bg-white rounded-b rounded-r shadow p-6">
+        <div class="bg-white rounded-b rounded-r shadow p-6 dark:bg-gray-800">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
-                <div class="text-lg font-semibold mb-2 md:mb-0">{{ tabs.find((t: Tab) => t.key === activeTab)?.label }}</div>
+                <div class="text-lg font-semibold mb-2 md:mb-0 dark:text-white">{{ tabs.find((t: Tab) => t.key === activeTab)?.label }}</div>
                 <div class="flex items-center gap-2">
                     <!-- Main Filter Dropdown -->
                     <select v-model="activeFilter" class="input input-bordered input-sm w-40">
@@ -85,7 +85,7 @@
                     </button>
                 </div>
             <div class="overflow-x-auto border border-gray-100 bg-white">
-                <table class="min-w-full">
+                <table class="min-w-full dark:bg-gray-800">
                     <thead>
                         <tr class="bg-purple-400 text-white text-xs">
                             <th class="px-2 py-2 text-center">No.</th>
@@ -109,11 +109,12 @@
                                     trainee.statusType === 'failed' ? 'bg-red-100 text-red-900' :
                                     trainee.statusType === 'no-show' ? 'bg-gray-200 text-gray-700' :
                                     trainee.statusType === 'withdrawn' ? 'bg-black text-white' : '',
-                                    'border-b border-gray-100 last:border-b-0'
-                                ]">
+                                    'dark:hover:bg-gray-500 border-b border-gray-100 last:border-b-0'
+                                ]
+                            ">
                                 <td class="px-2 py-2 text-center">{{ (currentPage-1)*pageSize + i + 1 }}</td>
-                                <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center">
-                                    <router-link :to="{ name: 'applicant-dashboard-details', params: { id: i } }" class="text-indigo-700 underline">
+                                <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center dark:text-indigo-400">
+                                    <router-link :to="{ name: 'applicant-dashboard-details', params: { id: i } }" class="text-indigo-700 underline dark:text-indigo-400">
                                         {{ trainee.name }}
                                     </router-link>
                                 </td>
@@ -131,10 +132,10 @@
                         </template>
                         <!-- Ongoing Table -->
                         <template v-else-if="activeTab === 'ongoing'">
-                            <tr v-for="(trainee, i) in paginatedTrainees" :key="i" class="hover:bg-gray-50 border-b border-gray-100 last:border-b-0">
+                            <tr v-for="(trainee, i) in paginatedTrainees" :key="i" class="dark:hover:bg-gray-500 border-b border-gray-100 last:border-b-0">
                                 <td class="px-2 py-2 text-center">{{ (currentPage-1)*pageSize + i + 1 }}</td>
-                                <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center">
-                                    <router-link :to="{ name: 'applicant-dashboard-details', params: { id: i } }" class="text-indigo-700 underline">
+                                <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center ">
+                                    <router-link :to="{ name: 'applicant-dashboard-details', params: { id: i } }" class="text-indigo-700 underline dark:text-indigo-400">
                                         {{ trainee.name }}
                                     </router-link>
                                 </td>
@@ -152,10 +153,10 @@
                         </template>
                         <!-- Pending Table -->
                         <template v-else>
-                            <tr v-for="(trainee, i) in paginatedTrainees" :key="i" class="hover:bg-gray-50 border-b border-gray-100 last:border-b-0">
+                            <tr v-for="(trainee, i) in paginatedTrainees" :key="i" class="dark:hover:bg-gray-500 border-b border-gray-100 last:border-b-0">
                                 <td class="px-2 py-2 text-center">{{ (currentPage-1)*pageSize + i + 1 }}</td>
                                 <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center">
-                                    <router-link :to="{ name: 'applicant-dashboard-details', params: { id: i } }" class="text-indigo-700 underline">
+                                    <router-link :to="{ name: 'applicant-dashboard-details', params: { id: i } }" class="text-indigo-700 underline dark:text-indigo-400">
                                         {{ trainee.name }}
                                     </router-link>
                                 </td>
@@ -182,9 +183,9 @@
             <!-- Pagination -->
             <div class="flex justify-end mt-4">
                 <nav class="inline-flex -space-x-px">
-                    <button @click="prevPage" :disabled="currentPage === 1" class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-l hover:bg-purple-100 bg-white transition-colors">&lt;</button>
-                    <button v-for="page in (activeTab === 'completed' ? completedTotalPages : totalPages)" :key="page" @click="goToPage(page)" :class="['px-2 py-1 text-xs border-t border-b border-gray-300', currentPage === page ? 'text-indigo-600' : 'text-gray-500', 'bg-white']">{{ page }}</button>
-                    <button @click="nextPage" :disabled="currentPage === (activeTab === 'completed' ? completedTotalPages : totalPages)" class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-r hover:bg-purple-100 bg-white transition-colors">&gt;</button>
+                    <button @click="prevPage" :disabled="currentPage === 1" class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-l hover:bg-purple-100 bg-white transition-colors dark:bg-gray-700">&lt;</button>
+                    <button v-for="page in (activeTab === 'completed' ? completedTotalPages : totalPages)" :key="page" @click="goToPage(page)" :class="['px-2 py-1 text-xs border border-gray-300', currentPage === page ? 'text-indigo-400 dark:bg-gray-600 bg-gray-600' : 'text-gray-500', '']">{{ page }}</button>
+                    <button @click="nextPage" :disabled="currentPage === (activeTab === 'completed' ? completedTotalPages : totalPages)" class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-r hover:bg-purple-100 bg-white transition-colors dark:bg-gray-700">&gt;</button>
                 </nav>
             </div>
         </div>
@@ -222,7 +223,7 @@ const dateFrom = ref('')
 const dateTo = ref('')
 const endDateFrom = ref('')
 const endDateTo = ref('')
-const pageSize = 5
+const pageSize = 10
 const currentPage = ref(1)
 
 // Add sub-tabs for Completed Training
@@ -238,10 +239,20 @@ const activeCompletedSubTab = ref('all')
 const traineesData: Record<Tab['key'], Trainee[]> = {
     pending: [
         { name: 'Olivia Brooks', position: 'SMM Specialist', team: 'Digital Marketing Team', office: 'Keppel', startingDate: 'August 5, 2024', status: 'Pending' },
-        { name: 'Heather Green', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Keppel', startingDate: 'August 9, 2024', status: 'Pending' },
+        { name: 'Heather Green', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Talisay', startingDate: 'August 9, 2024', status: 'Pending' },
         { name: 'Samantha Turner', position: 'Graphic Designer', team: 'Design', office: 'Keppel', startingDate: 'August 12, 2024', status: 'Pending' },
         { name: 'Samuel Harris', position: 'Front-end Developer', team: 'Web Development', office: 'Keppel', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Talisay', startingDate: 'August 12, 2024', status: 'Pending' },
         { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Keppel', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Talisay', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Keppel', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Keppel', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Talisay', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Keppel', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Talisay', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Keppel', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Keppel', startingDate: 'August 12, 2024', status: 'Pending' },
+        { name: 'Elizabeth Anderson', position: 'Business Development Associate', team: 'Brand Development Team', office: 'Talisay', startingDate: 'August 12, 2024', status: 'Pending' },
     ],
     ongoing: [
         { name: 'Olivia Brooks', position: 'SMM Specialist', team: 'Digital Marketing Team', office: 'Keppel', startingDate: 'August 5, 2024', endDate: 'August 6, 2024', trainingStatus: 'On going', allowanceReleasedDate: '', },

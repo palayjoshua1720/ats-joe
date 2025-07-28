@@ -1,13 +1,13 @@
 <template>
-	<div class="bg-gray-100 p-0 m-0">
+	<div class="bg-gray-100 p-0 m-0 dark:bg-[#111827]">
 		<!-- Application Title Box outside the card -->
 		<div class="flex items-center max-w-8xl mx-auto">
 			<h2 class="text-2xl font-bold bg-purple-400 text-white px-6 py-2 rounded-t">Application</h2>
 		</div>
-		<div class="max-w-8xl mx-auto">
+		<div class="max-w-8xl mx-aut dark:bg-[#111827]">
 			<div v-if="applicant" class="flex flex-col md:flex-row gap-6">
 				<!-- Right: Applicant Details Card -->
-				<div class="flex-1 bg-white rounded shadow p-6 md:p-8 border border-gray-100">
+				<div class="flex-1 bg-white rounded shadow p-6 md:p-8 border border-gray-100 dark:border-gray-800 dark:bg-gray-800">
 					<!-- Top Row: Back and Job Offer Button -->
 					<div class="flex flex-wrap items-center w-full mb-1 gap-x-4 gap-y-2">
 						<button @click="goBack" class="flex items-center text-purple-500 hover:text-green-700 font-semibold w-fit">
@@ -25,15 +25,15 @@
 						<img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-gray-200 shadow mb-4 md:mb-0 flex-shrink-0 mx-auto md:mx-0" />
 						<div class="flex-1 min-w-0">
 							<div class="w-full">
-								<div class="text-2xl font-bold text-gray-700 truncate">{{ applicant.name }}</div>
-								<div class="text-lg text-gray-500 font-semibold truncate">{{ applicant.position }}</div>
-								<div class="text-sm text-gray-400 truncate">{{ applicant.location }}</div>
-								<div class="text-sm text-gray-400 truncate">{{ applicant.email }} | {{ applicant.contact }}</div>
+								<div class="text-2xl font-bold text-gray-700 truncate dark:text-white">{{ applicant.name }}</div>
+								<div class="text-lg text-gray-500 font-semibold truncate dark:text-gray-300">{{ applicant.position }}</div>
+								<div class="text-sm text-gray-400 truncate dark:text-gray-500">{{ applicant.location }}</div>
+								<div class="text-sm text-gray-400 truncate dark:text-gray-500">{{ applicant.email }} | {{ applicant.contact }}</div>
 							</div>
 							<div class="mt-6 grid grid-cols-1 gap-8">
 								<div>
 									<div class="font-bold mb-1">Work Experience</div>
-									<div class="font-semibold text-gray-700">Talent Aquisition</div>
+									<div class="font-semibold text-gray-300">Talent Aquisition</div>
 									<div class="text-gray-500">GoPayr | July 2023 - October 2023</div>
 									<ul class="list-disc ml-6 text-gray-500 text-sm">
 										<li>Sourcing applicants for a specific positions</li>
@@ -42,11 +42,11 @@
 									</ul>
 									<div class="text-xs text-red-600 font-semibold mt-1">Reason for leaving<br>Low salary</div>
 									<div class="font-bold mt-4 mb-1">Educational Background</div>
-									<div class="font-semibold text-gray-700">Bachelor of Science in Psychology</div>
-									<div class="text-gray-500">University of San Jose - Recolets</div>
-									<div class="text-gray-400 text-xs">May 2024</div>
+									<div class="font-semibold text-gray-700 dark:text-gray-300">Bachelor of Science in Psychology</div>
+									<div class="text-gray-500 dark:text-gray-500">University of San Jose - Recolets</div>
+									<div class="text-gray-400 text-xs dark:text-gray-500">May 2024</div>
 									<div class="font-bold mt-4 mb-1">Recognition</div>
-									<ul class="list-disc ml-6 text-gray-500 text-sm">
+									<ul class="list-disc ml-6 text-gray-500 text-sm dark:text-gray-500">
 										<li>Graduate with Honors</li>
 										<li>Deans’ Lister</li>
 										<li>Best in Math</li>
@@ -54,7 +54,7 @@
 								</div>
 								<div>
 									<div class="font-bold mb-1">Skills</div>
-									<ul class="list-disc ml-6 text-gray-500 text-sm">
+									<ul class="list-disc ml-6 text-gray-500 text-sm dark:text-gray-500">
 										<li>Time management skills</li>
 										<li>Creative</li>
 										<li>Organizational skills</li>
@@ -67,23 +67,23 @@
 				</div>
 				
 				<!-- Left: Job Offer Form Card -->
-				<div class="md:w-1/2 w-full flex flex-col justify-start">
-					<div class="bg-white rounded shadow p-8 border border-gray-100 w-full">
+				<div class="md:w-1/2 w-full flex flex-col justify-start dark:bg-[#111827]">
+					<div class="bg-white rounded shadow p-8 border border-gray-100 dark:border-gray-800 w-full dark:bg-gray-800">
 						<form class="flex flex-col gap-3 text-sm">
 							<div class="flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-2">
-								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end">Job Offer Date</label>
+								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end dark:text-white">Job Offer Date</label>
 								<input type="date" class="input input-bordered w-full md:flex-1" v-model="form.jobOfferDate" />
 							</div>
 							<div class="flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-2">
-								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end">Name</label>
+								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end dark:text-white">Name</label>
 								<input type="text" class="input input-bordered w-full md:flex-1" placeholder="Full Name" v-model="form.name" />
 							</div>
 							<div class="flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-2">
-								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end">Address</label>
+								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end dark:text-white">Address</label>
 								<input type="text" class="input input-bordered w-full md:flex-1" placeholder="Address" v-model="form.address" />
 							</div>
 							<div class="flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-2">
-								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end">Position</label>
+								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end dark:text-white">Position</label>
 								<select class="input input-bordered w-full md:flex-1" v-model="form.position">
 									<option value="">Select position</option>
 									<option v-for="pos in uniquePositions" :key="pos" :value="pos">{{ pos }}</option>
@@ -94,11 +94,11 @@
 								</select>
 							</div>
 							<div class="flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-2">
-								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end">Onboarding Date</label>
+								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end dark:text-white">Onboarding Date</label>
 								<input type="date" class="input input-bordered w-full md:flex-1" v-model="form.onboardingDate" />
 							</div>
 							<div class="flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-2">
-								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end">Shift</label>
+								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end dark:text-white">Shift</label>
 								<select class="input input-bordered w-full md:flex-1" v-model="form.shift">
 									<option value="">Select shift</option>
 									<option>Day</option>
@@ -107,7 +107,7 @@
 								</select>
 							</div>
 							<div class="flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-2">
-								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end">Time</label>
+								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end dark:text-white">Time</label>
 								<select class="input input-bordered w-full md:flex-1" v-model="form.time">
 									<option value="">Select time</option>
 									<option>7:00 AM - 4:00 PM</option>
@@ -117,11 +117,11 @@
 								</select>
 							</div>
 							<div class="flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-2">
-								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end">Requirement Deadline</label>
+								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end dark:text-white">Requirement Deadline</label>
 								<input type="date" class="input input-bordered w-full md:flex-1" v-model="form.requirementDeadline" />
 							</div>
 							<div class="flex flex-col md:flex-row items-stretch md:items-center gap-1 md:gap-2">
-								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end">Salary</label>
+								<label class="font-semibold text-gray-700 w-full md:w-40 min-w-[120px] text-left md:text-end dark:text-white">Salary</label>
 								<select class="input input-bordered w-full md:flex-1" v-model="form.salary">
 									<option value="">Select salary</option>
 									<option>₱15,000</option>

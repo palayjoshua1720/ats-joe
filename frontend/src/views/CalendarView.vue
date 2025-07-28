@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-white rounded shadow p-2 sm:p-4 relative h-[100dvh] sm:h-[85vh] overflow-auto">
+	<div class="bg-white rounded shadow p-2 sm:p-4 relative h-[100dvh] sm:h-[85vh] overflow-auto dark:bg-gray-800">
 		<!-- The calendar -->
 		<FullCalendar :options="calendarOptions" ref="fullCalendar" />
 		<transition name="modal-fade">
@@ -18,15 +18,15 @@
 								{{ selectedDate ? selectedDate.toLocaleString('default', { weekday: 'long' }) : '' }}
 							</div>
 						</div>
-						<div class="p-2 sm:p-6">
+						<div class="p-2 sm:p-6 dark:bg-gray-800">
 							<div class="mb-4">
-								<div v-if="Object.values(eventsByTimeSlot).every(arr => !arr.length)" class="text-center text-gray-400 mb-4">
+								<div v-if="Object.values(eventsByTimeSlot).every(arr => !arr.length)" class="text-center text-gray-400 mb-4 dark:text-white">
 									No schedules for this day.
 								</div>
 								<div v-else>
 									<div v-for="slot in timeSlots" :key="slot" class="mb-1">
 										<div class="flex items-center flex-wrap gap-1">
-											<div class="w-24 sm:w-36 font-mono text-xs sm:text-sm">{{ slot }}</div>
+											<div class="w-24 sm:w-36 font-mono text-xs sm:text-sm dark:text-white">{{ slot }}</div>
 											<div class="flex-1 flex flex-wrap">
 												<template v-if="eventsByTimeSlot[slot] && eventsByTimeSlot[slot].length">
 													<span
@@ -45,15 +45,15 @@
 						</div>
 					</div>
 					<!-- Recruiter Legend beside/below the modal -->
-					<div v-if="Object.values(eventsByTimeSlot).every(arr => !arr.length)" class="text-center text-gray-400 mb-4">
+					<div v-if="Object.values(eventsByTimeSlot).every(arr => !arr.length)" class="text-center text-gray-400 mb-4 dark:text-gray-800">
 						<!-- empty -->
 					</div>
 					<div v-else>
-						<div class="mt-2 sm:mt-0 sm:ml-4 bg-white border rounded p-2 shadow-md w-full sm:w-fit h-fit self-start">
-							<div class="font-bold mb-1 whitespace-nowrap">Recruiter Legend</div>
+						<div class="mt-2 sm:mt-0 sm:ml-4 bg-white border rounded p-2 shadow-md w-full sm:w-fit h-fit self-start dark:bg-gray-800">
+							<div class="font-bold mb-1 whitespace-nowrap dark:text-white">Recruiter Legend</div>
 							<div v-for="legend in recruiterLegend" :key="legend.name" class="flex items-center mb-1">
 								<span :style="{ backgroundColor: legend.color }" class="inline-block w-4 h-4 rounded mr-2"></span>
-								<span class="text-xs sm:text-base">{{ legend.name }}</span>
+								<span class="text-xs sm:text-base dark:text-white">{{ legend.name }}</span>
 							</div>
 						</div>
 					</div>

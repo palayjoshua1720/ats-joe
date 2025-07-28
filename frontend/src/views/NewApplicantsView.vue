@@ -8,7 +8,7 @@
                 v-for="tab in tabs"
                 :key="tab.key"
                 @click="goToTab(tab.key)"
-                class="flex-1 cursor-pointer border border-purple-200 border-t-0 border-b-0 first:rounded-l last:rounded-r transition-all duration-200"
+                class="flex-1 cursor-pointer border border-purple-200 border-t-0 border-b-0 first:rounded-l last:rounded-r transition-all duration-200 dark:bg-gray-600"
                 :class="[
                     isActiveTab(tab.key)
                         ? 'bg-white h-32 -translate-y-8 z-10'
@@ -24,13 +24,13 @@
                         tab.color
                     ]"
                 ></div>
-                <div class="mt-4 text-3xl font-bold leading-none">{{ tab.count }}</div>
-                <div class="text-xs font-semibold text-gray-700 mt-1">{{ tab.label }}</div>
+                <div class="mt-4 text-3xl font-bold leading-none dark:text-white">{{ tab.count }}</div>
+                <div class="text-xs font-semibold text-gray-700 mt-1 dark:text-white">{{ tab.label }}</div>
             </div>
         </div>
         <div v-if="route.name === 'applicant-directory-new'">
             <!-- Card Layout -->
-            <div class="bg-white rounded shadow p-6">
+            <div class="bg-white rounded shadow p-6 dark:bg-gray-800">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2">
                     <div class="text-lg font-semibold mb-2 md:mb-0"></div>
                     <div class="flex items-center gap-2">
@@ -74,7 +74,7 @@
 
                 <!-- Modern Data Table with Checkbox -->
                 <div class="overflow-x-auto border border-gray-100 bg-white">
-                    <table class="min-w-full">
+                    <table class="min-w-full dark:bg-gray-800">
                         <thead>
                             <tr class="bg-gray-500 text-white text-xs">
                                 <th class="px-2 py-2 w-8 text-center">
@@ -91,7 +91,7 @@
                         <tbody>
                             <tr v-for="(applicant, i) in paginatedApplicants" :key="i" :class="[
                                 'transition',
-                                applicant.reapplicant ? 'bg-[#fbe9e7]' : 'hover:bg-gray-50',
+                                applicant.reapplicant ? 'bg-[#fbe9e7] dark:bg-[#4B2C2A]' : 'hover:bg-gray-50 dark:hover:bg-gray-500',
                                 'border-b border-gray-100 last:border-b-0'
                             ]">
                                 <td class="px-2 py-2 text-center">
@@ -99,7 +99,7 @@
                                 </td>
                                 <td class="px-4 py-2 text-xs text-center">{{ applicant.position }}</td>
                                 <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center">
-                                    <router-link :to="{ name: 'applicant-directory-new-details', params: { id: i + (currentPage-1)*pageSize } }" class="text-indigo-700 underline">
+                                    <router-link :to="{ name: 'applicant-directory-new-details', params: { id: i + (currentPage-1)*pageSize } }" class="text-indigo-700 underline dark:text-indigo-400">
                                         {{ applicant.name }}
                                     </router-link>
                                 </td>
@@ -117,32 +117,32 @@
 
                 <!-- Color Legend and Pagination Inline -->
                 <div class="flex items-center justify-between mt-4">
-                    <div class="bg-gray-100 p-3 rounded flex flex-col w-max">
+                    <div class="bg-gray-100 p-3 rounded flex flex-col w-max dark:bg-gray-700">
                         <span class="mb-2"><b>Color Legend</b></span>
                         <div class="flex items-center">
-                            <span class="w-4 h-4 rounded bg-orange-200 mr-2"></span>
+                            <span class="w-4 h-4 rounded bg-orange-200 mr-2 dark:bg-[#4B2C2A]"></span>
                             <span>Reapplicants</span>
                         </div>
                     </div>
-                    <nav class="inline-flex -space-x-px">
+                    <nav class="inline-flex -space-x-px dark:*:text-white">
                         <button
-                            class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-l hover:bg-[#fbe9e7] bg-white transition-colors"
+                            class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-l hover:bg-[#fbe9e7] bg-white transition-colors dark:bg-gray-700"
                             :disabled="currentPage === 1"
                             @click="goToPage(currentPage - 1)"
                         >&lt;</button>
                         <button
                             v-for="page in pageCount"
                             :key="page"
-                            class="px-2 py-1 text-xs"
+                            class="px-2 py-1 text-xs border border-gray-300"
                             :class="[
                                 page === currentPage
-                                    ? 'text-indigo-600 border-t border-b border-gray-300 bg-white'
-                                    : 'text-gray-500 border-t border-b border-gray-300 bg-white'
+                                    ? 'text-indigo-400 dark:bg-gray-600 bg-gray-600'
+                                    : 'text-gray-500'
                             ]"
                             @click="goToPage(page)"
                         >{{ page }}</button>
                         <button
-                            class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-r hover:bg-[#fbe9e7] bg-white transition-colors"
+                            class="px-2 py-1 text-xs text-gray-500 border border-gray-300 rounded-r hover:bg-[#fbe9e7] bg-white transition-colors dark:bg-gray-700"
                             :disabled="currentPage === pageCount"
                             @click="goToPage(currentPage + 1)"
                         >&gt;</button>
@@ -161,7 +161,7 @@ import 'vue3-toastify/dist/index.css'
 const router = useRouter()
 const route = useRoute()
 
-const pageSize = 7
+const pageSize = 10
 const currentPage = ref(1)
 
 const applicants = [
@@ -179,13 +179,6 @@ const applicants = [
     { position: 'QA Tester', name: 'Chris Evans', date: '2024-06-15', email: 'cevans@gmail.com', contact: '09123456789', salary: 15000, reapplicant: false },
     { position: 'UI Designer', name: 'Natasha Romanoff', date: '2024-05-20', email: 'nromanoff@gmail.com', contact: '09234567890', salary: 17000, reapplicant: false },
     { position: 'Backend Developer', name: 'Steve Rogers', date: '2024-04-10', email: 'srogers@gmail.com', contact: '09345678901', salary: 22000, reapplicant: false },
-    { position: 'Frontend Developer', name: 'Tony Stark', date: '2024-03-05', email: 'tstark@gmail.com', contact: '09456789012', salary: 25000, reapplicant: true },
-    { position: 'DevOps Engineer', name: 'Bruce Banner', date: '2024-02-28', email: 'bbanner@gmail.com', contact: '09567890123', salary: 24000, reapplicant: false },
-    { position: 'Project Manager', name: 'Clint Barton', date: '2024-01-18', email: 'cbarton@gmail.com', contact: '09678901234', salary: 26000, reapplicant: false },
-    { position: 'Support', name: 'Wanda Maximoff', date: '2024-01-10', email: 'wmaximoff@gmail.com', contact: '09789012345', salary: 16000, reapplicant: true },
-    { position: 'HR Recruitment', name: 'Peter Parker', date: '2024-01-02', email: 'pparker@gmail.com', contact: '09890123456', salary: 12000, reapplicant: false },
-    { position: 'Web Developer', name: 'Stephen Strange', date: '2023-12-25', email: 'sstrange@gmail.com', contact: '09901234567', salary: 20000, reapplicant: false },
-    { position: 'Web Developer', name: 'Scott Lang', date: '2023-12-20', email: 'slang@gmail.com', contact: '09111222333', salary: 19000, reapplicant: false },
 ]
 const uniquePositions = computed(() => {
     return [...new Set(applicants.map(a => a.position))]
