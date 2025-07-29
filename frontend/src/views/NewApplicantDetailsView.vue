@@ -7,10 +7,10 @@
 		<div class="max-w-7xl mx-auto bg-white rounded-b rounded-r shadow p-8 dark:bg-gray-800" v-if="applicant">
 			<div class="flex flex-wrap items-center w-full mb-1 gap-x-4 gap-y-2">
 				<button @click="goBack" class="mb-4 flex items-center text-purple-500 hover:text-purple-700 font-semibold">
-					<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+					<ChevronLeftIcon class="w-5 h-5 mr-2" />
 					Back
 				</button>
-				<div class="flex gap-2 mb-2">
+				<div class="flex gap-2 mb-2"> 
 					<template v-if="isShortlisted">
 						<button class="px-6 py-2 bg-orange-500 text-white font-bold rounded shadow border-2 border-orange-300 cursor-default w-fit ml-0 md:ml-[5rem]" disabled>
 							Shortlisted
@@ -100,6 +100,8 @@ import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useAppStore } from '@/stores/app'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import { ChevronLeftIcon } from '@heroicons/vue/24/solid'
+
 const route = useRoute()
 const router = useRouter()
 const appStore = useAppStore()

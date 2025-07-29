@@ -15,21 +15,7 @@
                     @click="toggleSidebar"
                 >
                     <span class="sr-only">Open sidebar</span>
-                    <svg
-                    class="h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"
-                        />
-                    </svg>
+                    <Bars3Icon class="w-6 h-6" />
                 </button>
 
                 <!-- Header Content -->
@@ -118,7 +104,9 @@
                                     @click="toggleTheme"
                                 >
                                     <div class="flex items-center">
-                                        <span class="mr-3 text-lg flex-shrink-0">{{ isDarkMode ? '🌞' : '🌙' }}</span>
+                                        <span class="mr-3 text-lg flex-shrink-0">
+                                            <component :is="isDarkMode ? SunIcon : MoonIcon" class="w-5 h-5 align-middle" />
+                                        </span>
                                         <span class="truncate">{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
                                     </div>
                                 </button>
@@ -131,9 +119,7 @@
                                     :disabled="isLoading"
                                 >
                                     <div class="flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-5 w-5 flex-shrink-0">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-                                        </svg>
+                                        <ArrowLeftStartOnRectangleIcon class="w-5 h-5 align-middle mr-3" />
                                         <span class="truncate">{{ isLoading ? 'Logging out...' : 'Sign out' }}</span>
                                     </div>
                                 </button>
@@ -164,7 +150,13 @@ import { useUser } from '@/composables/auth/useUser'
 import { useLogin } from '@/composables/auth/useLogin'
 import Sidebar from './Sidebar.vue'
 import AppLoader from '@/components/ui/AppLoader.vue'
-import { BellAlertIcon } from '@heroicons/vue/24/outline'
+import {
+    BellAlertIcon,
+    SunIcon,
+    MoonIcon,
+    ArrowLeftStartOnRectangleIcon,
+    Bars3Icon,
+} from '@heroicons/vue/24/outline'
 import { useRouter } from 'vue-router'
 
 // Store Instances
@@ -180,15 +172,15 @@ const isProfileOpen = ref(false)
 const isSidebarOpen = ref(false)
 const isNotificationsOpen = ref(false)
 const notifications = ref([
-  { title: 'New applicant submitted a form', time: '2 minutes ago' },
-  { title: 'Interview scheduled for John Doe', time: '1 hour ago' },
-  { title: 'System update completed', time: 'Yesterday' }
+    { title: 'New applicant submitted a form', time: '2 minutes ago' },
+    { title: 'Interview scheduled for John Doe', time: '1 hour ago' },
+    { title: 'System update completed', time: 'Yesterday' }
 ])
 const unreadCount = computed(() => notifications.value.length)
 const bellNotifications = ref([
-  { name: 'John Michael Smith', time: 'A few seconds ago' },
-  { name: 'Mary Elizabeth Johnson', time: '45 Minutes Ago' },
-  { name: 'Patricia Anne Thompson', time: '45 Minutes Ago' }
+    { name: 'John Michael Smith', time: 'A few seconds ago' },
+    { name: 'Mary Elizabeth Johnson', time: '45 Minutes Ago' },
+    { name: 'Patricia Anne Thompson', time: '45 Minutes Ago' }
 ])
 
 // Computed Properties
@@ -210,13 +202,13 @@ const toggleTheme = () => {
 }
 
 function toggleNotifications() {
-  isNotificationsOpen.value = !isNotificationsOpen.value
-  if (isNotificationsOpen.value) isProfileOpen.value = false
+    isNotificationsOpen.value = !isNotificationsOpen.value
+    if (isNotificationsOpen.value) isProfileOpen.value = false
 }
 
 function goToNotifications() {
-  isProfileOpen.value = false
-  router.push('/notifications')
+    isProfileOpen.value = false
+    router.push('/notifications')
 }
 
 // Lifecycle Hooks

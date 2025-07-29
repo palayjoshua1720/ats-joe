@@ -109,7 +109,7 @@
 		</div>
 		
 		<!-- Right: Logo Area -->
-		<div class="hidden md:flex flex-col justify-center items-center w-1/2 bg-white">
+		<div class="hidden md:flex flex-col justify-center items-center w-1/2 bg-white dark:bg-gray-800">
 			<div class="flex flex-col items-center">
 				<!-- Use current logo -->
 				<div class="h-[100%] w-[100%] flex items-center justify-center flex-shrink-0">

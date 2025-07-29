@@ -287,11 +287,11 @@ const calendarOptions = {
 		return 'none';
 	},
 	eventContent: function(arg: any) {
-	  // Render event as colored bar with text, similar to screenshot
-	  const bg = arg.event.backgroundColor || arg.event.extendedProps.color || '#8661c5';
-	  const text = arg.event.extendedProps.description || arg.event.title;
-	  const style = `background:${bg};color:#fff;border-radius:2px;padding:0 2px;font-size:11px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;margin-bottom:1px;`;
-	  return { html: `<div style='${style}'>${text}</div>` };
+		// Render event as colored bar with text, similar to screenshot
+		const bg = arg.event.backgroundColor || arg.event.extendedProps.color || '#8661c5';
+		const text = arg.event.extendedProps.description || arg.event.title;
+		const style = `background:${bg};color:#fff;border-radius:2px;padding:0 2px;font-size:11px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;margin-bottom:1px;`;
+		return { html: `<div style='${style}'>${text}</div>` };
 	},
 }
 
