@@ -36,7 +36,7 @@ class AuthController extends Controller
 
         // Authorization logic
         $allowedEmails = array_merge(
-            ['joeventulan@proweaver.net', 'jospaladsay@proweaver.net'],
+            ['joeventulan@proweaver.net', 'jospalay@proweaver.net'],
             ['hyatriba@prowe.net', 'jupb@prowe.net', 'julmelenc@prowe.net', 'reytahadlangit@prowe.net', 'theavila@prowe.net'],
             config('app.developers', [])
         );
@@ -54,6 +54,15 @@ class AuthController extends Controller
                 'name' => $data['alias'] ?? $data['user_email'],
                 'first_name' => $data['first_name'] ?? 'Unknown',
                 'last_name' => $data['last_name'] ?? '',
+                'fullname' => $data['name'] ?? 'Unknown',
+                'alias' => $data['alias'] ?? 'Unknown',
+                'user_type' => $data['user_type'] ?? 'Unknown',
+                'team_id' => $data['team_id'] ?? 'Unknown',
+                'team_name' => $data['team_name'] ?? 'Unknown',
+                'sub_team_id' => $data['sub_team_id'] ?? 'Unknown',
+                'sub_team_name' => $data['sub_team_name'] ?? 'Unknown',
+                'designation' => $data['hr_designation'] ?? 'Unknown',
+                'department' => $data['hr_department'] ?? 'Unknown',
                 'password' => Hash::make(uniqid()),
             ]
         );

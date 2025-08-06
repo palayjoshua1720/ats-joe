@@ -15,14 +15,23 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('fullname')->nullable();
+            $table->string('alias')->nullable();
             $table->string('email')->unique();
+            $table->string('user_type')->nullable();
+            $table->unsignedBigInteger('team_id')->nullable();
+            $table->string('team_name')->nullable();
+            $table->unsignedBigInteger('sub_team_id')->nullable();
+            $table->string('sub_team_name')->nullable();
+            $table->string('designation')->nullable();
+            $table->string('department')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->date('birthdate')->nullable();
             $table->string('gender')->nullable();
             $table->string('password');
-            $table->rememberToken(); // Optional for "remember me" logins
-            $table->timestamps();    // Adds created_at and updated_at
+            $table->rememberToken();
+            $table->timestamps();
         });
     }
 

@@ -89,7 +89,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(applicant, i) in paginatedApplicants" :key="i" :class="[
+                            <TableLoader v-if="loading" :colspan="7" />
+                            <tr v-else v-for="(applicant, i) in paginatedApplicants" :key="i" :class="[
                                 'transition',
                                 applicant.reapplicant ? 'bg-[#fbe9e7] dark:bg-[#4B2C2A]' : 'hover:bg-gray-50 dark:hover:bg-gray-500',
                                 'border-b border-gray-100 last:border-b-0'
@@ -157,7 +158,8 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
-import api from '@/services/api' // ✅ Use centralized axios instance
+import api from '@/services/api'
+import TableLoader from '@/components/ui/TableLoader.vue'
 import 'vue3-toastify/dist/index.css'
 
 const router = useRouter()
@@ -208,9 +210,11 @@ onBeforeUnmount(() => {
     document.removeEventListener('click', handleClickOutside)
 })
 
+const loading = ref(false)
+
 async function fetchApplicants() {
     try {
-        // ✅ Call Laravel backend using centralized API instance
+        loading.value = true
         const res = await api.get('/applicants')
 
         applicants.value = res.data.applicants
@@ -218,6 +222,8 @@ async function fetchApplicants() {
         tabs.value = res.data.tabs
     } catch (err) {
         console.error('Error fetching applicants:', err)
+    } finally {
+        loading.value = false
     }
 }
 

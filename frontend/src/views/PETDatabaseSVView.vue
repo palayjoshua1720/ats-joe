@@ -83,22 +83,17 @@
                         <tbody>
                             <tr v-for="(trainee, i) in paginatedTrainees" :key="i" class="dark:hover:bg-gray-500 border-b border-gray-100 last:border-b-0">
                                 <td class="px-2 py-2 text-center">{{ (currentPage-1)*pageSize + i + 1 }}</td>
-                                <td class="px-4 py-2 text-xs text-indigo-700 underline cursor-pointer text-center">
-                                    <router-link :to="{ name: 'applicant-dashboard-details', params: { id: i } }" class="text-indigo-700 underline dark:text-indigo-400">
+                                <td class="px-4 py-2 text-xs cursor-pointer text-center">
+                                    <!-- <router-link :to="{ name: 'applicant-dashboard-details', params: { id: i } }" class="text-indigo-700 underline dark:text-indigo-400"> -->
                                         {{ trainee.name }}
-                                    </router-link>
+                                    <!-- </router-link> -->
                                 </td>
-                                <td class="px-4 py-2 text-xs text-center">{{ trainee.position }}</td>
-                                <td class="px-4 py-2 text-xs text-center">{{ trainee.team }}</td>
-                                <td class="px-4 py-2 text-xs text-center">{{ trainee.office }}</td>
-                                <td class="px-4 py-2 text-xs text-center">{{ trainee.startingDate }}</td>
-                                <td class="px-4 py-2 text-xs text-center">
-                                    <select v-model="trainee.status" class="input input-bordered input-xs w-24">
-                                        <option value="Pending">Pending</option>
-                                        <option value="Proceed">Proceed</option>
-                                        <option value="On-going">On-going</option>
-                                        <option value="Completed">Completed</option>
-                                    </select>
+                                <td class="px-4 py-2 text-xs text-center text-gray-500">{{ trainee.position }}</td>
+                                <td class="px-4 py-2 text-xs text-center text-gray-500">{{ trainee.team }}</td>
+                                <td class="px-4 py-2 text-xs text-center text-gray-500">{{ trainee.office }}</td>
+                                <td class="px-4 py-2 text-xs text-center text-gray-500">{{ trainee.startingDate }}</td>
+                                <td class="px-4 py-2 text-xs text-center text-gray-500">
+                                    {{trainee.status}}
                                 </td>
                             </tr>
                             <tr v-if="paginatedTrainees.length === 0">
@@ -150,7 +145,7 @@
                 <!-- Attendance Sheet Section -->
                 <div class="flex justify-center bg-white shadow dark:bg-gray-800">
                     <div class="rounded p-4 md:p-6 w-full max-w-6xl">
-                        <h3 class="text-lg font-bold text-center mb-4">Attendance Sheet</h3>
+                        <h2 class="text-lg font-bold text-center mb-4">Attendance Sheet</h2>
                         
                         <!-- Date Range -->
                         <div class="flex flex-col md:flex-row mb-6 text-center">

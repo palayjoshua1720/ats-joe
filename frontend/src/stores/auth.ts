@@ -7,6 +7,15 @@ interface User {
   id: number
   email: string
   name: string
+  fullname: string
+  alias: string
+  user_type: number
+  team_id: number
+  team_name: string
+  sub_team_id: number
+  sub_team_name: string
+  designation: string
+  department: string
 }
 
 interface LoginCredentials {
@@ -36,6 +45,9 @@ export const useAuthStore = defineStore('auth', () => {
   const currentUser = computed(() => user.value)
   const isLoading = computed(() => loading.value)
   const hasError = computed(() => !!error.value)
+
+  console.log(currentUser);
+  
 
   // Actions
   async function login(credentials: LoginCredentials) {

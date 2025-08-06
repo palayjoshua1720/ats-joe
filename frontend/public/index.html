@@ -33,12 +33,39 @@
     
     <!-- Manifest -->
     <link rel="manifest" href="<%= BASE_URL %>manifest.json">
+
+    <style>
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .preloader-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #8661c5;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    </style>
+
   </head>
   <body>
     <noscript>
       <strong>We're sorry but <%= VUE_APP_TITLE %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
+    <div id="preloader">
+      <div class="preloader-spinner"></div>
+    </div>
     <!-- built files will be auto injected -->
   </body>
 </html> 

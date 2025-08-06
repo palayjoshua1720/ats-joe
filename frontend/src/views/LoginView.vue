@@ -72,9 +72,15 @@
 							<span class="absolute inset-y-0 left-0 flex items-center pl-3">
 								<KeyIcon class="h-5 w-5 text-gray-400" />
 							</span>
-							<input id="keycode" v-model="keycode" required type="text"
+							<input
+								id="keycode"
+								v-model="keycode"
+								required
+								@input="keycode = keycode.replace(/\D/g, '')"
+								type="text"
 								class="block w-full pl-10 pr-3 py-2 rounded bg-white border border-white border-opacity-30 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:bg-gray-50 transition"
-								placeholder="Enter keycode" autocomplete="off" />
+								placeholder="Enter keycode"
+								autocomplete="off" />
 						</div>
 					</div>
 

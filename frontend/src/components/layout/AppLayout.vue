@@ -1,7 +1,5 @@
 <template>
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        <!-- Loader -->
-        <AppLoader v-if="uiStore.isLoading" />
         <!-- Sidebar -->
         <Sidebar v-model:isOpen="isSidebarOpen" />
 
@@ -27,7 +25,7 @@
                     <!-- User Profile Section -->
                     <div class="ml-auto flex items-center md:ml-6">
                         <!-- Notification Bell -->
-                        <div class="relative mr-4 flex-shrink-0 hidden md:block">
+                        <div class="relative mt-4 mr-4 flex-shrink-0 hidden md:block">
                             <button
                                 type="button"
                                 class="p-2 rounded-full bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 relative"
@@ -61,8 +59,8 @@
                         </div>
                         <!-- User Info beside button -->
                         <div v-if="currentUser" class="flex flex-col items-end mr-2 text-right">
-                            <span class="text-xs text-gray-500 dark:text-gray-400 truncate" :title="currentUser?.email">{{ currentUser?.email }}</span>
-                            <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate" :title="currentUser?.name">{{ currentUser?.name }}</span>
+                            <span class="text-lg font-semibold dark:text-gray-400 truncate" :title="currentUser?.fullname">{{ currentUser?.fullname }}</span>
+                            <span class="text-xs text-gray-800 dark:text-gray-200 truncate" :title="currentUser?.team_name"><b>{{ currentUser?.designation }}</b> | {{ currentUser?.team_name }}</span>
                         </div>
                         <!-- Profile Dropdown -->
                         <div class="relative ml-3">
@@ -149,7 +147,6 @@ import { useClickOutside } from '@/composables/ui/useClickOutside'
 import { useUser } from '@/composables/auth/useUser'
 import { useLogin } from '@/composables/auth/useLogin'
 import Sidebar from './Sidebar.vue'
-import AppLoader from '@/components/ui/AppLoader.vue'
 import {
     BellAlertIcon,
     SunIcon,
@@ -220,5 +217,10 @@ onMounted(() => {
 
 onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside)
+})
+
+onMounted(() => {
+    const preloader = document.getElementById('preloader')
+    if (preloader) preloader.remove()
 })
 </script> 

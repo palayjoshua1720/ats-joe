@@ -64,7 +64,9 @@
                             <td class="px-4 py-2 text-xs text-center">{{ applicant.name }}</td>
                             <td class="px-4 py-2 text-xs text-center">
                                 <span class="text-indigo-700 underline cursor-pointer">{{ applicant.resume }}</span>
-                                <span class="ml-2 cursor-pointer" title="Download"><svg xmlns="http://www.w3.org/2000/svg" class="inline w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4" /></svg></span>
+                                <span class="ml-2 cursor-pointer" title="Download">
+                                    <ArrowDownTrayIcon class="inline w-4 h-4"/>
+                                </span>
                             </td>
                             <td class="px-2 py-2 text-center">
                                 <span>{{ applicant.handsOn.status }}</span>
@@ -144,6 +146,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { ArrowDownTrayIcon } from '@heroicons/vue/24/solid'
 
 const applicants = ref([
     {
