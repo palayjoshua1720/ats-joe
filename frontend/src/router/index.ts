@@ -22,6 +22,8 @@ import ApplicantDashboardView from '@/views/ApplicantDashboardView.vue'
 import NotificationsView from '@/views/NotificationsView.vue'
 import CalendarView from '@/views/CalendarView.vue'
 import JobOfferApplicantDetailsView from '@/views/JobOfferApplicantDetailsView.vue'
+import ApplicantsView from '@/views/ApplicantsView.vue'
+import PETDatabaseSVView from '@/views/PETDatabaseSVView.vue'
 
 // Types
 interface NavigationItem {
@@ -157,6 +159,26 @@ const routes: RouteRecordRaw[] = [
 				name: 'applicant-dashboard-details',
 				component: ApplicantDashboardView,
 				meta: { title: 'Applicant Dashboard Details' }
+			},
+			{
+				path: 'applicants',
+				name: 'applicants',
+				component: ApplicantsView,
+				meta: {
+					requiresAuth: true,
+					title: 'Applicants', 
+					icon: DocumentTextIcon,
+				}
+			},
+			{
+				path: 'pet-database-sv',
+				name: 'pet-database-sv',
+				component: PETDatabaseSVView,
+				meta: {
+					requiresAuth: true,
+					title: 'Pre-Employment Training Database SV',
+					icon: ChartBarIcon
+				}
 			},
 			{
 				path: 'calendar',

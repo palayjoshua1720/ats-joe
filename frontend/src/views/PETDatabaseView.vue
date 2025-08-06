@@ -7,13 +7,13 @@
                 :key="tab.key"
                 @click="activeTab = tab.key"
                 :class="[
-                    'w-full md:w-auto px-4 md:px-6 py-2 font-semibold border-t border-l border-b-0 border-r-0 rounded-t',
+                    'w-full md:w-auto px-4 md:px-6 py-2 font-semibold border-t border-l border-b-0 border-r-0',
                     activeTab === tab.key
                         ? 'bg-gradient-to-r from-purple-400 to-pink-400 text-white border-purple-400'
                         : 'bg-white dark:bg-gray-400 text-purple-700 border-purple-300 hover:bg-purple-50',
                     'transition-colors duration-150',
                 ]"
-                style="border-width: 2px 2px 0 2px; margin-right: -2px;"
+                style="border-width: 2px 2px 2px 2px; margin-right: -2px;"
             >
                 {{ tab.label }}
             </button>

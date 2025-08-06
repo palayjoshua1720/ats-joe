@@ -12,7 +12,7 @@
 					</div>
 
 					<div class="text-center mb-6">
-						<h2 class="text-3xl font-bold text-white">Please login to proceed</h2>
+						<h2 class="text-3xl font-bold text-white">Applicant Tracker System</h2>
 					</div>
 
 					<!-- Email -->
