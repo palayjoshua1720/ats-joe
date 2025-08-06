@@ -45,10 +45,10 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await api.post<AuthResponse>('/auth/login', credentials)
       const { token: newToken, user: userData } = response.data
-      
+
       token.value = newToken
       user.value = userData
-      
+
       localStorage.setItem('token', newToken)
       router.push('/')
     } catch (err) {
@@ -79,44 +79,28 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function checkAuth() {
-    if (!token.value) return false
+ async function checkAuth() {
+  if (!token.value) return false
 
-    loading.value = true
-    error.value = null
+  loading.value = true
+  error.value = null
 
-    try {
-      // TODO: Replace mock auth check with actual API call when ready
-      // Original API call (commented out for future reference):
-      /*
-      const response = await api.get<User>('/auth/me')
-      user.value = response.data
-      */
-
-      // Mock successful auth check
-      if (token.value === 'mock-token') {
-        // If we have a mock token, restore the mock user
-        const mockUser = {
-          id: 1,
-          email: localStorage.getItem('mock-email') || 'user@example.com',
-          name: (localStorage.getItem('mock-email') || 'user@example.com').split('@')[0]
-        }
-        user.value = mockUser
-        return true
-      }
-
-      return false
-    } catch (err) {
-      const apiError = err as ApiError
-      error.value = apiError.message || 'Session expired. Please login again.'
-      token.value = null
-      user.value = null
-      localStorage.removeItem('token')
-      return false
-    } finally {
-      loading.value = false
-    }
+  try {
+    const response = await api.get<User>('/auth/me') // Enable this
+    user.value = response.data
+    return true
+  } catch (err) {
+    const apiError = err as ApiError
+    error.value = apiError.message || 'Session expired. Please login again.'
+    token.value = null
+    user.value = null
+    localStorage.removeItem('token')
+    return false
+  } finally {
+    loading.value = false
   }
+}
+
 
   function clearError() {
     error.value = null

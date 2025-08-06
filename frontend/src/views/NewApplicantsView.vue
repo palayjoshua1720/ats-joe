@@ -157,6 +157,7 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import api from '@/services/api' // ✅ Use centralized axios instance
 import 'vue3-toastify/dist/index.css'
 
 const router = useRouter()
@@ -165,40 +166,16 @@ const route = useRoute()
 const pageSize = 10
 const currentPage = ref(1)
 
-const applicants = [
-    { position: 'HR Recruitment', name: 'John Michael Smith', date: '2024-07-31', email: 'jmsmith@gmail.com', contact: '09285483729', salary: 18000, reapplicant: false },
-    { position: 'PHP Developer', name: 'Mary Elizabeth Johnson', date: '2023-06-25', email: 'mjohson@gmail.com', contact: '09878886534', salary: 21000, reapplicant: false },
-    { position: 'SMM Specialist', name: 'Patricia Anne Thompson', date: '2024-05-11', email: 'pthompson@gmail.com', contact: '09876937854', salary: 17000, reapplicant: false },
-    { position: 'HR Compensation and Benefits', name: 'William Alexander Johnson', date: '2024-04-30', email: 'wjohnson@gmail.com', contact: '09284378567', salary: 14000, reapplicant: false },
-    { position: 'SEO Analyst', name: 'Jenifer Lynn Rodriguez', date: '2024-03-11', email: 'jrodriguez@gmail.com', contact: '09898048271', salary: 13000, reapplicant: true },
-    { position: 'FDG', name: 'James Edward Davis', date: '2024-02-23', email: 'jdavis@gmail.com', contact: '09893057868', salary: 23000, reapplicant: true },
-    { position: 'Web Designer', name: 'Linda Marie Clark', date: '2024-02-19', email: 'lclark@gmail.com', contact: '09849372492', salary: 12000, reapplicant: false },
-    { position: 'HR Recruitment', name: 'Elizabeth Ann Scott', date: '2024-01-07', email: 'escott@gmail.com', contact: '09835057483', salary: 12000, reapplicant: false },
-    { position: 'Web Developer', name: 'Michael Joseph Garcia', date: '2024-01-05', email: 'mjgarcia@gmail.com', contact: '09123217589', salary: 18000, reapplicant: false },
-    { position: 'Web Developer', name: 'Barbara Jean Hernandez', date: '2024-01-05', email: 'bhernandez@gmail.com', contact: '09898923153', salary: 40000, reapplicant: false },
-    // --- Add more for pagination ---
-    { position: 'QA Tester', name: 'Chris Evans', date: '2024-06-15', email: 'cevans@gmail.com', contact: '09123456789', salary: 15000, reapplicant: false },
-    { position: 'UI Designer', name: 'Natasha Romanoff', date: '2024-05-20', email: 'nromanoff@gmail.com', contact: '09234567890', salary: 17000, reapplicant: false },
-    { position: 'Backend Developer', name: 'Steve Rogers', date: '2024-04-10', email: 'srogers@gmail.com', contact: '09345678901', salary: 22000, reapplicant: false },
-]
-const uniquePositions = computed(() => {
-    return [...new Set(applicants.map(a => a.position))]
-})
-// const staticPositions = [
-//     'HR Recruitment',
-//     'PHP Developer',
-//     'SMM Specialist',
-//     'HR Compensation and Benefits',
-//     'SEO Analyst',
-//     'FDG',
-//     'Web Designer',
-//     'Web Developer',
-// ]
+const applicants = ref<any[]>([])
+const uniquePositions = ref<string[]>([])
+const tabs = ref<any[]>([])
+
 const activeFilter = ref('name')
 const searchValue = ref('')
 const showFilters = ref(false)
 const filterDropdown = ref<HTMLElement | null>(null)
 const selected = ref<number[]>([])
+
 const allSelected = computed({
     get() {
         return filteredApplicants.value.length > 0 && filteredApplicants.value.every((_, i) => selected.value.includes(i))
@@ -211,43 +188,64 @@ const allSelected = computed({
         }
     }
 })
+
 function toggleAll() {
     allSelected.value = !allSelected.value
 }
+
 function handleClickOutside(event: MouseEvent) {
     if (showFilters.value && filterDropdown.value && !filterDropdown.value.contains(event.target as Node)) {
         showFilters.value = false
     }
 }
+
 onMounted(() => {
     document.addEventListener('click', handleClickOutside)
+    fetchApplicants()
 })
+
 onBeforeUnmount(() => {
     document.removeEventListener('click', handleClickOutside)
 })
+
+async function fetchApplicants() {
+    try {
+        // ✅ Call Laravel backend using centralized API instance
+        const res = await api.get('/applicants')
+
+        applicants.value = res.data.applicants
+        uniquePositions.value = res.data.uniquePositions
+        tabs.value = res.data.tabs
+    } catch (err) {
+        console.error('Error fetching applicants:', err)
+    }
+}
+
 const dateFrom = ref('')
 const dateTo = ref('')
+
 watch(activeFilter, () => {
     searchValue.value = ''
     dateFrom.value = ''
     dateTo.value = ''
 })
+
 const filteredApplicants = computed(() => {
-    let arr = applicants
+    let arr = applicants.value
     if (activeFilter.value === 'name') {
-        arr = applicants.filter(a =>
+        arr = arr.filter(a =>
             !searchValue.value || a.name.toLowerCase().includes(searchValue.value.toLowerCase())
         )
     } else if (activeFilter.value === 'position') {
-        arr = applicants.filter(a =>
+        arr = arr.filter(a =>
             !searchValue.value || a.position === searchValue.value
         )
     } else if (activeFilter.value === 'salary') {
-        if (!searchValue.value) return applicants
+        if (!searchValue.value) return arr
         const [min, max] = searchValue.value.split('-').map(Number)
-        arr = applicants.filter(a => a.salary >= min && a.salary <= max)
+        arr = arr.filter(a => a.salary && a.salary >= min && a.salary <= max)
     } else if (activeFilter.value === 'date') {
-        arr = applicants.filter(a => {
+        arr = arr.filter(a => {
             if (dateFrom.value && a.date < dateFrom.value) return false
             if (dateTo.value && a.date > dateTo.value) return false
             return true
@@ -255,18 +253,8 @@ const filteredApplicants = computed(() => {
     }
     return arr
 })
-const tabs = [
-    { key: 'new', label: 'New', count: 33, color: 'bg-gray-500' },
-    { key: 'pooling', label: 'Pooling', count: 3, color: 'bg-orange-500' },
-    { key: 'shortlisted', label: 'Shortlisted', count: 47, color: 'bg-yellow-400' },
-    { key: 'hands-on', label: 'Hands-on', count: 5, color: 'bg-yellow-200' },
-    { key: 'final-interview', label: 'Final Interview', count: 3, color: 'bg-lime-300' },
-    { key: 'job-offer', label: 'Job Offer', count: 1, color: 'bg-green-400' },
-    { key: 'hired', label: 'Hired', count: 1, color: 'bg-green-700' },
-]
 
 const pageCount = computed(() => Math.ceil(filteredApplicants.value.length / pageSize))
-
 const paginatedApplicants = computed(() => {
     const start = (currentPage.value - 1) * pageSize
     return filteredApplicants.value.slice(start, start + pageSize)
@@ -278,14 +266,15 @@ function goToPage(page: number) {
 }
 
 watch(filteredApplicants, () => {
-    // Reset to first page if filter changes and current page is out of range
     if (currentPage.value > pageCount.value) currentPage.value = 1
 })
 
 function goToTab(tabKey: string) {
     router.push({ name: `applicant-directory-${tabKey}` })
 }
+
 function isActiveTab(tabKey: string) {
     return route.name === `applicant-directory-${tabKey}`
 }
 </script>
+

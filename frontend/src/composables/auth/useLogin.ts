@@ -1,23 +1,8 @@
-/**
- * useLogin Composable
- * 
- * A composable that handles user authentication functionality including login and logout.
- * It manages the login form state, handles form submission, and provides error handling.
- * 
- * Features:
- * - Form state management (email, password)
- * - Login form submission with validation
- * - Error handling and loading states
- * - Logout functionality
- * - Automatic redirection after successful login
- * 
- * @returns {Object} An object containing form state, loading state, error state, and auth methods
- */
-
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useUiStore } from '@/stores/ui'
+import api from '@/services/api' // Axios instance
 
 export function useLogin() {
 	const router = useRouter()
@@ -28,107 +13,106 @@ export function useLogin() {
 	const email = ref('')
 	const password = ref('')
 	const keycode = ref('')
-	const loginPending = ref(false)
 	const loading = ref(false)
 	const error = ref('')
+	const loginPending = ref(false) // controls which form to show
 
+	const tempToken = ref('') // store token until keycode validated
+
+	// Step 1: Login
 	const handleLogin = async () => {
+		loading.value = true
+		error.value = ''
 		try {
-			loading.value = true
-			error.value = ''
-
-			// Validate input
-			if (!email.value || !password.value) {
-				throw new Error('Please enter both email and password')
+			if (!email.value.trim() || !password.value.trim()) {
+				throw new Error('Please enter both email and password.')
 			}
 
-			// TODO: Replace mock login with actual authentication when ready
-			// Original authentication code (commented out for future reference):
-			/*
-			await authStore.login({
+			const response = await api.post('/auth/login', {
 				email: email.value,
 				password: password.value
 			})
-			*/
 
-			await new Promise(resolve => setTimeout(resolve, 1000));
+			// Save token temporarily, don't store in localStorage yet
+			tempToken.value = response.data.access_token
+			authStore.user = response.data.user
 
-			loginPending.value = true;
-
-		} catch (err) {
-			error.value = err instanceof Error ? err.message : 'An error occurred during login'
+			// Show keycode form
+			loginPending.value = true
+		} catch (err: any) {
+			console.error('Login failed:', err)
+			error.value = err.response?.data?.message || err.message || 'Login failed. Please try again.'
 		} finally {
 			loading.value = false
 		}
 	}
 
+	// Step 2: Verify Keycode
 	const handleKeycode = async () => {
-		// Validate keycode input
+		loading.value = true
+		error.value = ''
 		try {
-			loading.value = true
-			error.value = ''
-			
-			if (!keycode.value) {
-				throw new Error('Please enter keycode')
+			if (!keycode.value.trim()) {
+				throw new Error('Please enter the keycode.')
 			}
 
-			const mockKeycode = '12345678'
+			const response = await api.post('/auth/keycode', {
+				keycode: keycode.value
+			})
 
-			if (keycode.value == mockKeycode) {
+			// Laravel backend returns { verified: true/false, message: "..." }
+			if (response.data.verified) {
+				// Save token permanently
+				localStorage.setItem('token', tempToken.value)
+				authStore.token = tempToken.value
 
-				// Mock successful login
-				const mockUser = {
-					id: 1,
-					email: email.value,
-					name: email.value.split('@')[0]
-				}
-
-				// Set mock user in store
-				authStore.user = mockUser
-				authStore.token = 'mock-token'
-				localStorage.setItem('token', 'mock-token')
-				localStorage.setItem('mock-email', email.value)
-				localStorage.setItem('user_type', 'admin')
-
-				await new Promise(resolve => setTimeout(resolve, 2500));
-
-				const redirectPath = route.query.redirect as string || '/applicant-directory/new-applicants'
+				const redirectPath = (route.query.redirect as string) || '/applicant-directory/new-applicants'
 				await router.push(redirectPath)
 			} else {
-				throw new Error('Invalid keycode')
+				error.value = response.data.message || 'Invalid keycode'
 			}
-
-		} catch (err) {
-			error.value = err instanceof Error ? err.message : 'An error occurred during login'
+		} catch (err: any) {
+			console.error('Keycode verification failed:', err)
+			error.value = err.response?.data?.message || err.message || 'Keycode verification failed.'
 		} finally {
 			loading.value = false
 		}
 	}
 
-
-	async function handleLogout() {
-		uiStore.setLoading(true)
+	const handleLogout = async () => {
+		uiStore.setLoading(true) // keep consistent with the UI loader
 		try {
-			await authStore.logout()
-			// Simulate network delay
-			await new Promise(resolve => setTimeout(resolve, 1000))
-			router.push({ name: 'login' })
-		} catch (error) {
-			console.error('Logout failed:', error)
+			await api.post('/auth/logout', {}, {
+				headers: {
+					Authorization: `Bearer ${authStore.token || localStorage.getItem('token')}`
+				}
+			})
+
+			localStorage.clear()
+			authStore.user = null
+			authStore.token = ''
+			email.value = ''
+			password.value = ''
+			keycode.value = ''
+
+			await router.push({ name: 'login' })
+		} catch (err) {
+			console.error('Logout failed:', err)
 		} finally {
 			uiStore.setLoading(false)
 		}
 	}
 
+
 	return {
 		email,
 		password,
 		keycode,
-		loginPending,
 		loading,
 		error,
+		loginPending,
 		handleLogin,
-		handleLogout,
-		handleKeycode
+		handleKeycode,
+		handleLogout
 	}
-} 
+}
