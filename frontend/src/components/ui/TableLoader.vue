@@ -3,6 +3,7 @@
         <td :colspan="colspan" class="pt-10 text-center">
             <div class="inline-block">
                 <div class="loader"></div>
+                <div class="text-center text-gray-400 py-4 text-sm">Fetching Data</div>
             </div>
         </td>
     </tr>

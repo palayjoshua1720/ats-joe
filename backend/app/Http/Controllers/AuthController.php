@@ -114,7 +114,7 @@ class AuthController extends Controller
     } else {
         return response()->json([
             'verified' => false,
-            'message' => 'Failed'
+            'message' => 'Invalid keycode, please try again.'
         ], 400);
     }
 }

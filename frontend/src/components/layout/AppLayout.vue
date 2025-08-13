@@ -5,7 +5,7 @@
 
         <div class="lg:pl-64">
             <!-- Header -->
-            <header class="sticky top-0 z-10 flex h-16 flex-shrink-0 ">
+            <header class="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white">
                 <!-- Mobile Menu Button -->
                 <button
                     type="button"

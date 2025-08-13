@@ -9,6 +9,8 @@ import DocumentTextIcon from '@heroicons/vue/24/outline/DocumentTextIcon.js'
 import ChartBarIcon from '@heroicons/vue/24/outline/ChartBarIcon.js'
 import CalendarDaysIcon from '@heroicons/vue/24/outline/CalendarDaysIcon.js'
 import FolderOpenIcon from '@heroicons/vue/24/outline/FolderOpenIcon.js'
+import CheckCircleIcon from '@heroicons/vue/24/outline/CheckCircleIcon.js'
+import CheckCircleIconSolid from '@heroicons/vue/24/solid/CheckCircleIcon.js'
 import PoolingApplicantsView from '@/views/PoolingApplicantsView.vue'
 import ShortlistedApplicantsView from '@/views/ShortlistedApplicantsView.vue'
 import HandsOnApplicantsView from '@/views/HandsOnApplicantsView.vue'
@@ -24,6 +26,9 @@ import CalendarView from '@/views/CalendarView.vue'
 import JobOfferApplicantDetailsView from '@/views/JobOfferApplicantDetailsView.vue'
 import ApplicantsView from '@/views/ApplicantsView.vue'
 import PETDatabaseSVView from '@/views/PETDatabaseSVView.vue'
+import InProgressView from '@/views/InProgressView.vue'
+import TrainingAllowanceView from '@/views/TrainingAllowanceView.vue'
+import CompletedView from '@/views/CompletedView.vue'
 
 // Types
 interface NavigationItem {
@@ -198,6 +203,37 @@ const routes: RouteRecordRaw[] = [
 					requiresAuth: true,
 					title: 'Resources',
 					icon: FolderOpenIcon
+				},
+			},
+			{
+				path: 'in-progress',
+				name: 'in-progress',
+				component: InProgressView,
+				meta: {
+					requiresAuth: true,
+					title: 'In Progress',
+					icon: CheckCircleIcon
+				},
+			},
+			{
+				path: 'completed',
+				name: 'completed',
+				component: CompletedView,
+				meta: {
+					requiresAuth: true,
+					title: 'Completed',
+					icon: CheckCircleIconSolid
+				},
+			},
+			{
+				path: 'in-progress/training-allowance/:id',
+				name: 'training-allowance',
+				component: TrainingAllowanceView,
+				meta: {
+					requiresAuth: true,
+					title: 'Training Allowance',
+					icon: CheckCircleIconSolid,
+					hidden: true
 				},
 			},
 			{

@@ -171,7 +171,7 @@
                         <div class="flex flex-col lg:flex-row gap-4">
                             <!-- Attendance Table -->
                             <div class="flex-1">
-                                <div class="overflow-x-auto border border-gray-300 rounded" style="max-height: 400px; overflow-y: auto;">
+                                <div class="overflow-x-auto border border-gray-300 rounded">
                                     <table class="min-w-full dark:bg-gray-800">
                                         <thead class="">
                                             <tr class="bg-gray-500 text-white text-xs">
@@ -493,7 +493,7 @@ const traineesData: Record<Tab['key'], Trainee[]> = {
             team: 'Form Developers Group', 
             office: 'Keppel', 
             startingDate: '2025-08-07', 
-            endDate: '2025-08-13', 
+            endDate: '2025-08-27', 
             trainingStatus: 'On going', 
             allowanceReleasedDate: '',
             trainingDuration: '12 Days Pre-Employment Training',

@@ -87,10 +87,16 @@
                                 :class="activePhase === item.name ? 'text-[#8661c5]' : 'text-white group-hover:text-[#8661c5]'"
                             />
                             <span
-                                class="ml-3 text-sm font-medium whitespace-normal break-words"
+                                class="ml-3 text-sm font-medium whitespace-normal break-words relative inline-block"
                                 :class="activePhase === item.name ? 'text-[#8661c5]' : 'text-white group-hover:text-[#8661c5]'"
                             >
                                 {{ item.name }}
+                                <span
+                                    v-if="item.name === 'Applicants' && applicantCount > 0"
+                                    class="absolute -top-2 -right-5 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md"
+                                >
+                                    {{ applicantCount }}
+                                </span>
                             </span>
                         </router-link>
                     </template>
@@ -102,7 +108,7 @@
                 <div class="flex items-center justify-center space-x-2 text-xs text-white">
                     <span>© {{ new Date().getFullYear() }}</span>
                     <span class="w-1 h-1 rounded-full bg-secondary-bg dark:bg-secondary-dark-bg"></span>
-                    <span>Developed by Proweaver</span>
+                    <span>Developed by Sir Joe</span>
                 </div>
             </div>
         </div>
@@ -157,7 +163,8 @@ const navigation = computed(() => {
   const layoutRoute = router.options.routes.find((r: any) => r.path === '/')
   if (!layoutRoute?.children) return []
   return layoutRoute.children
-    .filter((r: any) => r.meta?.requiresAuth && r.name !== 'not-found' && r.name !== 'home' && r.name !== 'about')
+    // .filter((r: any) => r.meta?.requiresAuth && r.name !== 'not-found' && r.name !== 'home' && r.name !== 'about')
+    .filter((r: any) => r.meta?.requiresAuth && !r.meta?.hidden && r.name !== 'not-found' && r.name !== 'home' && r.name !== 'about')
     .map((r: any) => ({
       name: r.meta?.title || r.name,
       to: `/${r.path}`,
@@ -201,6 +208,7 @@ function expandParentForCurrentRoute() {
 
 const appStore = useAppStore()
 const { activePhase } = storeToRefs(appStore)
+const applicantCount = ref(3);
 
 function onTabClick(phase: string) {
   appStore.setActivePhase(phase)
